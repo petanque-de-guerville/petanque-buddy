@@ -4,9 +4,9 @@ PROJET "BET PÉTANQUE"
 Objectif
 --------
 
-Créer un concept de fou pour que la pétanque soit encore plus un plaisir.
-    - Création d'une interface permettant la gestion des scores/paris de la pétanque.
-    - Accessoirement devenir millionnaire
+* Créer un concept de fou pour que la pétanque soit encore plus un plaisir.
+* Création d'une interface permettant la gestion des scores/paris de la pétanque.
+* Accessoirement devenir millionnaire
 
 Contexte
 --------
@@ -15,7 +15,7 @@ Contexte
 
 Périmètre
 ---------
-* Choix de l'interface :
+* Choix de l'interface
   * Site Web ?
   * App iOS/Android ?
   * Windows Phone ? .... (mouhahahaha)
