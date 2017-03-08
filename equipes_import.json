@@ -1,0 +1,20 @@
+[
+    {
+      "annee":2017,
+      "nom_equipe": "Les Castors",
+      "joueurs":  ["bob", "alice", "chloe"],
+      "classement" : 0
+    },
+    {
+      "annee":2017,
+      "nom_equipe": "Les Fans de Ragoût",
+      "joueurs":  ["daniel", "elise", "flore"],
+      "classement" : 0
+    },
+    {
+      "annee":2017,
+      "nom_equipe": "Les Papillons de lumière",
+      "joueurs":  ["gwladys", "hector", "isidore"],
+      "classement" : 0
+    }
+]

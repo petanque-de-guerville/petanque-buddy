@@ -1,17 +1,47 @@
 [
     {
-        "pseudo": "alice",
-        "equipes": [{"2017":1}, {"2016":3}, {"2015":2}],
-        "fortune": 100
+      "pseudo": "alice",
+      "equipe": "Les Castors",
+      "fortune": 100
     },
     {
       "pseudo": "bob",
-      "equipes": [{"2017":2}, {"2016":3}, {"2015":1}],
+      "equipe": "Les Castors",
       "fortune":84
     },
     {
       "pseudo": "chloe",
-      "equipes": [{"2016":4}, {"2015":1}],
+      "equipe": "Les Castors",
       "fortune": 98
+    },
+    {
+      "pseudo": "daniel",
+      "equipe": "Les Fans de Ragoût",
+      "fortune": 34
+    },
+    {
+      "pseudo": "elise",
+      "equipe": "Les Fans de Ragoût",
+      "fortune": 103
+    },
+    {
+      "pseudo": "flore",
+      "equipe": "Les Fans de Ragoût",
+      "fortune": 98
+    },
+    {
+      "pseudo": "gwladys",
+      "equipe": "Les Papillons de lumière",
+      "fortune": 100
+    },
+    {
+      "pseudo": "hector",
+      "equipe": "Les Papillons de lumière",
+      "fortune": 80
+    },
+    {
+      "pseudo": "isidore",
+      "equipe": "Les Papillons de lumière",
+      "fortune": 70
     }
 ]

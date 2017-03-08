@@ -1,0 +1,40 @@
+<!-- index.html -->
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="scotchTodo">
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+    <title>Node/Angular Essai</title>
+
+    <!-- SCROLLS -->
+
+    <!-- SPELLS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="core.js"></script>
+
+</head>
+<!-- SET THE CONTROLLER AND GET ALL TODOS -->
+<body ng-controller="mainController">
+    <div class="container">
+
+        <!-- HEADER AND TODO COUNT -->
+        <div class="jumbotron text-center">
+            <h1>Équipe composée de <span class="label label-info">{{ joueurs.length }}</span> joueurs</h1>
+        </div>
+        <div ng-repeat="joueur in joueurs">
+<ul>
+  <li>
+    {{joueur}}
+  </li>
+</ul>
+               </div>
+
+
+    </div>
+
+</body>
+</html>
