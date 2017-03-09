@@ -36,7 +36,7 @@ app.get('/api/equipes', function(req, res) {
 
 
 app.get('*', function(req, res) {
-        res.sendFile('./public/index.html');
+        res.sendfile('./public/index.html');
 });
 
 app.listen(3000, "192.168.0.14", function () {
