@@ -2,7 +2,7 @@
 <!doctype html>
 
 <!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="scotchTodo">
+<html ng-app="petanque">
 <head>
     <!-- META -->
     <meta charset="utf-8">
@@ -11,30 +11,40 @@
     <title>Node/Angular Essai</title>
 
     <!-- SCROLLS -->
+    <link rel="stylesheet" href="./style.css" />
 
     <!-- SPELLS -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <!-- AngularJS Material Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+
+
+    <!-- AngularJS Material Javascript now available via Google CDN; version 1.0.7 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.js"></script>
     <script src="core.js"></script>
 
 </head>
 <!-- SET THE CONTROLLER AND GET ALL TODOS -->
-<body ng-controller="mainController">
-    <div class="container">
-
-        <!-- HEADER AND TODO COUNT -->
-        <div class="jumbotron text-center">
-            <h1>Équipe composée de <span class="label label-info">{{ joueurs.length }}</span> joueurs</h1>
-        </div>
-        <div ng-repeat="joueur in joueurs">
-<ul>
-  <li>
-    {{joueur}}
-  </li>
-</ul>
-               </div>
-
-
-    </div>
+<div class="container">
+   <div ng-controller="SidebarController">
+     <div class="sidebar" sidebar-directive="state">
+       <a href="#" id="navigation-toggle" ng-click="toggleState()">Navigation</a>
+       <ul class="navigation">
+         <li class="navigation-items"> <a href="#">Link1</a>
+         </li>
+         <li class="navigation-items"> <a href="#">Link2</a>
+         </li>
+         <li class="navigation-items"> <a href="#">Link3</a>
+         </li>
+         <li class="navigation-items"> <a href="#">Link4</a>
+         </li>
+         <li class="navigation-items"> <a href="#">Link4</a>
+         </li>
+       </ul>
+     </div>
+   </div>
+ </div>
 
 </body>
 </html>

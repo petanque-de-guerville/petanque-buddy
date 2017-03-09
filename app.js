@@ -36,9 +36,9 @@ app.get('/api/equipes', function(req, res) {
 
 
 app.get('*', function(req, res) {
-        res.sendfile('./public/index.html');
+        res.sendFile('./public/index.html');
 });
 
-app.listen(3000, function () {
+app.listen(3000, "192.168.0.14", function () {
   console.log('Petanque-buddy écoute sur le port 3000...')
 })

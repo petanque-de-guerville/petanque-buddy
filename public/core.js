@@ -1,13 +1,26 @@
-var scotchTodo = angular.module('scotchTodo', []);
+var app = angular.module('petanque', []);
 
-function mainController($scope, $http) {
+app.controller('SidebarController', function($scope) {
 
-    $http.get('/api/equipes')
-        .success(function(data) {
-            $scope.joueurs = data.Item.joueurs;
-            console.log(data);
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
-        });
-}
+    $scope.state = false;
+
+    $scope.toggleState = function() {
+        $scope.state = !$scope.state;
+    };
+
+});
+
+app.directive('sidebarDirective', function() {
+    return {
+        link : function(scope, element, attr) {
+            scope.$watch(attr.sidebarDirective, function(newVal) {
+                  if(newVal)
+                  {
+                    element.addClass('show');
+                    return;
+                  }
+                  element.removeClass('show');
+            });
+        }
+    };
+});
