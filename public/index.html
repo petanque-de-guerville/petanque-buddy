@@ -13,7 +13,7 @@
     <!-- SCROLLS -->
 
     <!-- SPELLS -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.1/angular-material.css" />
     <link rel="stylesheet" href="https://material.angularjs.org/1.1.1/docs.css" />
 
@@ -40,9 +40,19 @@
     <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
 
       <md-toolbar class="md-theme-indigo">
-        <h1 class="md-toolbar-tools">Menu</h1>
+    <div class="md-toolbar-tools">
+      <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+      </md-button>
+        <h3 flex="" md-truncate="">Pétanque Buddy</h3>
+        <md-button class="md-icon-button" aria-label="Fermer" ng-click="close()">
+          <md-icon md-svg-icon="img/icons/ic_close_24px.svg"></md-icon>
+        </md-button>
+</div>
       </md-toolbar>
-      <md-content layout-padding="" ng-controller="LeftCtrl">
+  </md-toolbar>
+
+      <md-content layout-padding="">
 
         <md-menu-item>
           Joueurs
@@ -73,7 +83,7 @@
       <div layout="column" >
 
         <div>
-          <md-button ng-click="toggleMenu()" class="md-icon-button md-primary">
+          <md-button ng-click="toggleMenu()" class="md-icon-button md-primary" aria-label="Menu">
         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
 </md-button>
         </div>
