@@ -55,7 +55,7 @@
       <md-content layout-padding="">
 
         <md-menu-item>
-          Joueurs
+          <a href="#/joueurs">Joueurs</a>
         </md-menu-item>
 
         <md-menu-item>
@@ -82,14 +82,19 @@
 
       <div layout="column" >
 
+        <div layout="row" >
+
         <div>
           <md-button ng-click="toggleMenu()" class="md-icon-button md-primary" aria-label="Menu">
         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
 </md-button>
         </div>
 
+        <div ng-view></div>
+
 
       </div>
+    </div>
 
       <div flex=""></div>
 
