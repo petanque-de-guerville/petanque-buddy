@@ -1,7 +1,7 @@
 angular
   .module('MyApp',['ngMaterial', 'ngMessages', 'material.svgAssetsCache'])
   .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
-    $scope.toggleLeft = buildDelayedToggler('left');
+    $scope.toggleMenu = buildDelayedToggler('left');
 
     /**
      * Supplies a function that will continue to operate until the
@@ -34,17 +34,6 @@ angular
             $log.debug("toggle " + navID + " is done");
           });
       }, 200);
-    }
-
-    function buildToggler(navID) {
-      return function() {
-        // Component lookup should always be available since we are not using `ng-if`
-        $mdSidenav(navID)
-          .toggle()
-          .then(function () {
-            $log.debug("toggle " + navID + " is done");
-          });
-      };
     }
   })
   .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {

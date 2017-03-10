@@ -44,6 +44,12 @@
       </md-toolbar>
       <md-content layout-padding="" ng-controller="LeftCtrl">
 
+        <md-menu-item>
+                Share...
+              </md-menu-item>
+              <md-menu-item>
+                      Don't share...
+                    </md-menu-item>
 
       </md-content>
 
@@ -51,25 +57,15 @@
 
     <md-content flex="" layout-padding="">
 
-      <div layout="column" layout-align="top center">
-        <p>
-        The left sidenav will 'lock open' on a medium (=960px wide) device.
-        </p>
-        <p>
-        The right sidenav will focus on a specific child element.
-        </p>
+      <div layout="column" >
 
         <div>
-          <md-button ng-click="toggleLeft()" class="md-primary" hide-gt-md="">
-            Toggle left
-          </md-button>
+          <md-button ng-click="toggleMenu()" class="md-icon-button md-primary">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+</md-button>
         </div>
 
-        <div>
-          <md-button ng-click="toggleRight()" ng-hide="isOpenRight()" class="md-primary">
-            Toggle right
-          </md-button>
-        </div>
+
       </div>
 
       <div flex=""></div>
