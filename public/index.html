@@ -23,6 +23,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-resource.min.js"></script>
     <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
     <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.1/angular-material.js"></script>
 
@@ -52,26 +53,26 @@
       </md-toolbar>
   </md-toolbar>
 
-      <md-content layout-padding="">
+      <md-content layout="column">
 
         <md-menu-item>
-          <a href="#/joueurs">Joueurs</a>
+          <a class="md-button" href="#/joueurs" ng-click="close()">Joueurs</a>
         </md-menu-item>
 
         <md-menu-item>
-          Équipes
+          <a class="md-button" href="#/equipes" ng-disabled="true" ng-click="close()">Équipes</a>
         </md-menu-item>
 
         <md-menu-item>
-          Matchs
+          <a class="md-button" href="#/matchs" ng-disabled="true" ng-click="close()">Matchs</a>
         </md-menu-item>
 <md-divider></md-divider>
 <md-menu-item>
-    Paramètres
+    <a class="md-button" href="#/parametres" ng-disabled="true" ng-click="close()">Paramètres</a>
 </md-menu-item>
 
         <md-menu-item>
-          Administration
+          <a class="md-button" href="#/administration" ng-disabled="true" ng-click="close()">Administration</a>
         </md-menu-item>
       </md-content>
 

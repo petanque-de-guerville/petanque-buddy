@@ -1,1 +1,8 @@
 Page des {{ page }} !
+
+<input type="search" ng-model="j" placeholder="Chercher un joueur..." aria-label="Chercher un joueur" />
+<ul class="example-animate-container">
+  <li class="animate-repeat" ng-repeat="joueur in joueurs | filter:{'pseudo':j} as resultat">
+    {{joueur.pseudo}} joue dans l'équipe {{joueur.equipe}}. Fortune : {{joueur.fortune}}
+  </li>
+</ul>
