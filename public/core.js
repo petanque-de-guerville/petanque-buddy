@@ -7,6 +7,14 @@ angular
         templateUrl: '/views/joueurs.html',
         controller: 'JoueursCtrl'
         })
+      .when('/equipes/:nom', {
+             templateUrl: '/views/fiche_equipe.html',
+             controller: 'FicheEquipeCtrl'
+             })
+      .when('/equipes', {
+          templateUrl: '/views/equipes.html',
+          controller: 'EquipesCtrl'
+          })
       .when('/', { templateUrl: '/views/main.html'})
       .otherwise({ redirectTo: '/'});
     }])
@@ -18,7 +26,15 @@ angular
                                       function(r) {deferred.resolve(r);},
                                       deferred.reject);
         return deferred.promise;}}})
-  .controller('AppCtrl', function ($scope, $mdSidenav) {
+ .factory('equipes', function($http, $q, $resource){
+    return {
+      data: function() {
+        var deferred = $q.defer();
+        $resource('/api/equipes/all').get({},
+                                      function(r) {deferred.resolve(r);},
+                                      deferred.reject);
+        return deferred.promise;}}})
+.controller('AppCtrl', function ($scope, $mdSidenav) {
     $scope.toShow = "home";
 
     $scope.toggleMenu = function() {
@@ -40,6 +56,31 @@ angular
       $scope.joueurs = res.Items;
     }, function(err){
       $scope.joueurs = "Erreur dans le chargement...";
-    });
-    //console.log($scope.joueurs)
-});
+    })})
+  .controller('EquipesCtrl', function($scope, equipes) {
+      $scope.page = "ÉQUIPES";
+      $scope.equipes = "Chargement...";
+      equipes.data().then(function(res){
+        $scope.equipes = res.Items;
+      }, function(err){
+        $scope.equipes = "Erreur dans le chargement...";
+      })})
+  .controller('FicheEquipeCtrl', function($scope, $routeParams, $resource, $q){
+    $scope.nom_equipe = $routeParams.nom;
+    $scope.done = false;
+    $scope.erreur = false;
+    var fetch = function(){
+      var deferred = $q.defer();
+      $resource('/api/equipes/' + $routeParams.nom).get({},
+                                    function(r) {deferred.resolve(r);},
+                                    deferred.reject);
+      return deferred.promise;};
+    fetch().then(function(res){
+        $scope.done = true;
+        $scope.erreur = false;
+        $scope.equipe = res.Items;
+      }, function(err){
+        $scope.done = true;
+        $scope.erreur = true;
+        });
+  });

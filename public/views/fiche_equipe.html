@@ -1,0 +1,11 @@
+<h1>Fiche équipe </h1>
+
+L'équipe '{{nom_equipe}}' est constituée de : </br>
+<span ng-if="!done">Chargement...</span>
+<span ng-if="erreur">Erreur !</span>
+<span ng-if="done && !erreur">
+    <ul>
+      <li ng-repeat="joueur in equipe[0].joueurs">
+        {{joueur}}
+      </li>
+    </ul> </span>

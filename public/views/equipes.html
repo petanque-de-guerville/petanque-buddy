@@ -1,0 +1,14 @@
+Page des {{ page }} !
+
+<input type="search" ng-model="j" placeholder="Chercher une équipe..." aria-label="Chercher une équipe" />
+<ul>
+  <li ng-repeat="equipe in equipes | filter:{'nom_equipe':j}">
+    {{equipe.nom_equipe}} est constituée de :
+    <ul>
+      <li ng-repeat="joueur in equipe.joueurs">
+        {{joueur}}
+      </li>
+    </ul>
+
+  </li>
+</ul>
