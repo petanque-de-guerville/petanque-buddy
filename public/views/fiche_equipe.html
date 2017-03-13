@@ -5,7 +5,7 @@ L'équipe '{{nom_equipe}}' est constituée de : </br>
 <span ng-if="erreur">Erreur !</span>
 <span ng-if="done && !erreur">
     <ul>
-      <li ng-repeat="joueur in equipe[0].joueurs">
-        {{joueur}}
+      <li ng-repeat="joueur in equipe.joueurs">
+        <a ng-href="#/joueurs/{{joueur}}">{{joueur}}</a> 
       </li>
     </ul> </span>

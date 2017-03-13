@@ -14,12 +14,17 @@ var docClient = new AWS.DynamoDB.DocumentClient()
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/api/joueurs', function(req, res) {
+app.get('/api/joueurs/:id', function(req, res) {
   var table = "Joueur";
   var params = {
       TableName: table
   };
 
+  if (req.params.id != "all"){
+    params.FilterExpression = "pseudo = :pseudo";
+    params.ExpressionAttributeValues = {':pseudo': req.params.id}
+  }
+  
   docClient.scan(params, function(err, data) {
       if (err) {
           console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));

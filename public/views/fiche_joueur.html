@@ -1,0 +1,10 @@
+<h1>Fiche joueur </h1>
+
+Le jouer '{{pseudo}}' fait partie de l'équipe </br>
+<span ng-if="!done">Chargement...</span>
+<span ng-if="erreur">Erreur !</span>
+<span ng-if="done && !erreur">
+  <a ng-href="#/equipes/{{joueur.equipe}}">
+    {{joueur.equipe}}
+  </a> et possède {{joueur.fortune}} boyards.
+</span>

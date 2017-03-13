@@ -3,6 +3,11 @@ Page des {{ page }} !
 <input type="search" ng-model="j" placeholder="Chercher un joueur..." aria-label="Chercher un joueur" />
 <ul class="example-animate-container">
   <li class="animate-repeat" ng-repeat="joueur in joueurs | filter:{'pseudo':j} as resultat">
-    {{joueur.pseudo}} joue dans l'équipe <a ng-href="#/equipes/{{joueur.equipe}}">{{joueur.equipe}}</a>. Fortune : {{joueur.fortune}}
+    <a ng-href="#/joueurs/{{joueur.pseudo}}">
+      {{joueur.pseudo}}
+    </a> joue dans l'équipe
+    <a ng-href="#/equipes/{{joueur.equipe}}">
+      {{joueur.equipe}}
+    </a>. Fortune : {{joueur.fortune}} boyards.
   </li>
 </ul>

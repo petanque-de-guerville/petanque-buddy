@@ -3,6 +3,10 @@ angular
   .config(['$routeProvider', '$locationProvider',
   function($routeProvider) {
     $routeProvider
+    .when('/joueurs/:pseudo', {
+      templateUrl: '/views/fiche_joueur.html',
+      controller: 'FicheJoueurCtrl'
+      })
       .when('/joueurs', {
         templateUrl: '/views/joueurs.html',
         controller: 'JoueursCtrl'
@@ -22,7 +26,7 @@ angular
     return {
       data: function() {
         var deferred = $q.defer();
-        $resource('/api/joueurs').get({},
+        $resource('/api/joueurs/all').get({},
                                       function(r) {deferred.resolve(r);},
                                       deferred.reject);
         return deferred.promise;}}})
@@ -78,7 +82,26 @@ angular
     fetch().then(function(res){
         $scope.done = true;
         $scope.erreur = false;
-        $scope.equipe = res.Items;
+        $scope.equipe = res.Items[0];
+      }, function(err){
+        $scope.done = true;
+        $scope.erreur = true;
+        });
+  })
+  .controller('FicheJoueurCtrl', function($scope, $routeParams, $resource, $q){
+    $scope.pseudo = $routeParams.pseudo;
+    $scope.done = false;
+    $scope.erreur = false;
+    var fetch = function(){
+      var deferred = $q.defer();
+      $resource('/api/joueurs/' + $routeParams.pseudo).get({},
+                                    function(r) {deferred.resolve(r);},
+                                    deferred.reject);
+      return deferred.promise;};
+    fetch().then(function(res){
+        $scope.done = true;
+        $scope.erreur = false;
+        $scope.joueur = res.Items[0];
       }, function(err){
         $scope.done = true;
         $scope.erreur = true;
