@@ -1,0 +1,20 @@
+{
+  "name": "petanque-buddy",
+  "version": "1.0.0",
+  "description": "petanque-buddy ============",
+  "main": "app.js",
+  "dependencies": {
+    "aws-sdk": "^2.24.0",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git-codecommit.us-west-2.amazonaws.com/v1/repos/petanque_buddy"
+  },
+  "author": "",
+  "license": "ISC"
+}

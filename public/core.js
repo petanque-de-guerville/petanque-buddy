@@ -20,6 +20,10 @@ angular
           controller: 'EquipesCtrl'
           })
       .when('/', { templateUrl: '/views/main.html'})
+      .when('/login',{
+        templateUrl: '/views/login.html',
+        controller: 'LoginCtrl'
+        })
       .otherwise({ redirectTo: '/'});
     }])
   .factory('joueurs', function($http, $q, $resource){
@@ -39,8 +43,8 @@ angular
                                       deferred.reject);
         return deferred.promise;}}})
 .controller('AppCtrl', function ($scope, $mdSidenav) {
+    $scope.icone_connexion = "lock_open"
     $scope.toShow = "home";
-
     $scope.toggleMenu = function() {
         $mdSidenav("left")
           .toggle();
@@ -50,9 +54,19 @@ angular
       $mdSidenav('left').close();
     };
 
+
+
     $scope.show = function (toShow) {
       $scope.toShow = toShow;
-    }})
+    }
+
+  })
+  .controller("LoginCtrl", function($scope){
+    $scope.login = function(){
+      console.log("Appui sur login")
+      
+    }
+  })
   .controller('JoueursCtrl', function($scope, joueurs) {
     $scope.page = "JOUEURS";
     $scope.joueurs = "Chargement...";

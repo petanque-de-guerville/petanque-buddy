@@ -42,15 +42,21 @@
       <md-toolbar class="md-theme-indigo">
     <div class="md-toolbar-tools">
       <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
-        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+        <md-icon >menu</md-icon>
       </md-button>
-        <h3 flex="" md-truncate="">Pétanque Buddy</h3>
-        <md-button class="md-icon-button" aria-label="Fermer" ng-click="close()">
-          <md-icon md-svg-icon="img/icons/ic_close_24px.svg"></md-icon>
+        <h2  md-truncate="">Pétanque Buddy</h2>
+
+
+        <md-button class="md-icon-button" aria-label="S'identifier" ng-href="#/login" ng-click="close()">
+          <md-icon >{{icone_connexion}}</md-icon>
         </md-button>
-</div>
+        <md-button class="md-icon-button" aria-label="Fermer" ng-click="close()">
+          <md-icon>close</md-icon>
+        </md-button>
+
+      </div>
       </md-toolbar>
-  </md-toolbar>
+
 
       <md-content layout="column">
 
@@ -86,7 +92,7 @@
 
         <div>
           <md-button ng-click="toggleMenu()" class="md-icon-button md-primary" aria-label="Menu">
-        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+        <md-icon> menu </md-icon>
 </md-button>
         </div>
 
