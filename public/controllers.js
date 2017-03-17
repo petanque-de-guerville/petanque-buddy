@@ -1,11 +1,14 @@
 var MyApp = angular.module("MyApp");
 
-MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService) {
-    if (AuthService.isLoggedIn()){
-      $scope.icone_connexion = "lock"
-    } else{
-      $scope.icone_connexion = "lock_open"
-    }
+MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location) {
+
+    $scope.$watch(AuthService.isLoggedIn, function(newVal, oldVal){
+      if (newVal){
+        $scope.icone_connexion = "lock_open"
+      } else {
+        $scope.icone_connexion = "lock"
+      }
+    })
     $scope.toShow = "home";
     $scope.toggleMenu = function() {
         $mdSidenav("left")
@@ -22,10 +25,23 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService) {
       $scope.toShow = toShow;
     }
 
+    $scope.login_or_logout = function(){
+      $scope.close()
+      if (AuthService.isLoggedIn()){
+        AuthService.logout()
+        $location.path("/")
+      } else {
+        $location.path("/login")
+      }
+    }
+
   })
   .controller("LoginCtrl", function($scope, AuthService, $location){
     $scope.login = function () {
-      if (AuthService.isLoggedIn()) {AuthService.logout();}
+      if (AuthService.isLoggedIn()) {
+        AuthService.logout();
+        $location.path('/');
+      }
       // initial values
       $scope.error = false;
       $scope.disabled = true;
