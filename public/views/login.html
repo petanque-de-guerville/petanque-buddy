@@ -1,12 +1,14 @@
 
     <h2>Login</h2>
-    <form name="form" ng-submit="login()" role="form">
+    <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+
+    <form ng-submit="login()" role="form">
             <label>Pseudo</label>
-            <input type="text" name="pseudo" ng-model="form.username" required />
+            <input type="text" name="pseudo" ng-model="loginForm.username" required />
 
 
             <label>Mot de passe</label>
-            <input type="password" name="password" ng-model="form.password" required />
+            <input type="password" name="password" ng-model="loginForm.password" required />
 
 
             <md-button class="md-raised md-primary" type="submit">Login</button>

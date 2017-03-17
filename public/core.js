@@ -1,123 +1,81 @@
-angular
-  .module('MyApp',['ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'ngRoute', 'ngResource'])
-  .config(['$routeProvider', '$locationProvider',
+var MyApp = angular.module('MyApp',
+                          ['ngMaterial', 'ngMessages', 'ngRoute', 'ngResource']); //'material.svgAssetsCache'
+MyApp.config(['$routeProvider', '$locationProvider',
   function($routeProvider) {
     $routeProvider
     .when('/joueurs/:pseudo', {
       templateUrl: '/views/fiche_joueur.html',
-      controller: 'FicheJoueurCtrl'
+      controller: 'FicheJoueurCtrl',
+      access: {restricted: true}
       })
       .when('/joueurs', {
         templateUrl: '/views/joueurs.html',
-        controller: 'JoueursCtrl'
+        controller: 'JoueursCtrl',
+        access: {restricted: true}
         })
       .when('/equipes/:nom', {
              templateUrl: '/views/fiche_equipe.html',
-             controller: 'FicheEquipeCtrl'
+             controller: 'FicheEquipeCtrl',
+             access: {restricted: true}
              })
       .when('/equipes', {
           templateUrl: '/views/equipes.html',
-          controller: 'EquipesCtrl'
+          controller: 'EquipesCtrl',
+          access: {restricted: true}
           })
-      .when('/', { templateUrl: '/views/main.html'})
+      .when('/', {
+          templateUrl: '/views/main.html',
+          access: {restricted: false}})
       .when('/login',{
         templateUrl: '/views/login.html',
-        controller: 'LoginCtrl'
+        controller: 'LoginCtrl',
+        access: {restricted: false}
         })
+      .when('/logout', {
+    controller: 'logoutController',
+    access: {restricted: false}
+  })
+  .when('/register', {
+    templateUrl: 'views/register.html',
+    controller: 'RegisterCtrl',
+    access: {restricted: false}
+  })
       .otherwise({ redirectTo: '/'});
     }])
-  .factory('joueurs', function($http, $q, $resource){
+  .factory('joueurs', function($http, $resource){
+    var deferred = undefined
     return {
-      data: function() {
-        var deferred = $q.defer();
-        $resource('/api/joueurs/all').get({},
-                                      function(r) {deferred.resolve(r);},
-                                      deferred.reject);
-        return deferred.promise;}}})
- .factory('equipes', function($http, $q, $resource){
-    return {
-      data: function() {
-        var deferred = $q.defer();
-        $resource('/api/equipes/all').get({},
-                                      function(r) {deferred.resolve(r);},
-                                      deferred.reject);
-        return deferred.promise;}}})
-.controller('AppCtrl', function ($scope, $mdSidenav) {
-    $scope.icone_connexion = "lock_open"
-    $scope.toShow = "home";
-    $scope.toggleMenu = function() {
-        $mdSidenav("left")
-          .toggle();
-    };
+      liste: function() {
+          if (!deferred) {
+                deferred = $resource('/api/joueurs/all')
+                          .query()
+                          .$promise
+          }
+          return deferred
+          }}
+    })
+ .factory('equipes', function($http, $resource){
+   var deferred = undefined
+   return {
+     liste: function() {
+         if (!deferred) {
+               deferred = $resource('/api/equipes/all')
+                         .query()
+                         .$promise
+         }
+         return deferred
+         }}
+   })
 
-    $scope.close = function () {
-      $mdSidenav('left').close();
-    };
-
-
-
-    $scope.show = function (toShow) {
-      $scope.toShow = toShow;
-    }
-
-  })
-  .controller("LoginCtrl", function($scope){
-    $scope.login = function(){
-      console.log("Appui sur login")
-      
-    }
-  })
-  .controller('JoueursCtrl', function($scope, joueurs) {
-    $scope.page = "JOUEURS";
-    $scope.joueurs = "Chargement...";
-    joueurs.data().then(function(res){
-      $scope.joueurs = res.Items;
-    }, function(err){
-      $scope.joueurs = "Erreur dans le chargement...";
-    })})
-  .controller('EquipesCtrl', function($scope, equipes) {
-      $scope.page = "ÉQUIPES";
-      $scope.equipes = "Chargement...";
-      equipes.data().then(function(res){
-        $scope.equipes = res.Items;
-      }, function(err){
-        $scope.equipes = "Erreur dans le chargement...";
-      })})
-  .controller('FicheEquipeCtrl', function($scope, $routeParams, $resource, $q){
-    $scope.nom_equipe = $routeParams.nom;
-    $scope.done = false;
-    $scope.erreur = false;
-    var fetch = function(){
-      var deferred = $q.defer();
-      $resource('/api/equipes/' + $routeParams.nom).get({},
-                                    function(r) {deferred.resolve(r);},
-                                    deferred.reject);
-      return deferred.promise;};
-    fetch().then(function(res){
-        $scope.done = true;
-        $scope.erreur = false;
-        $scope.equipe = res.Items[0];
-      }, function(err){
-        $scope.done = true;
-        $scope.erreur = true;
+MyApp.run(function ($rootScope, $location, $route, AuthService) {
+          $rootScope.$on('$routeChangeStart',
+            function (event, next, current) {
+              AuthService.getUserStatus()
+              .then(function(){
+                if (next.access.restricted && !AuthService.isLoggedIn()){
+                  $location.path('/login');
+                  $route.reload();
+                }
+              });
+          });
         });
-  })
-  .controller('FicheJoueurCtrl', function($scope, $routeParams, $resource, $q){
-    $scope.pseudo = $routeParams.pseudo;
-    $scope.done = false;
-    $scope.erreur = false;
-    var fetch = function(){
-      var deferred = $q.defer();
-      $resource('/api/joueurs/' + $routeParams.pseudo).get({},
-                                    function(r) {deferred.resolve(r);},
-                                    deferred.reject);
-      return deferred.promise;};
-    fetch().then(function(res){
-        $scope.done = true;
-        $scope.erreur = false;
-        $scope.joueur = res.Items[0];
-      }, function(err){
-        $scope.done = true;
-        $scope.erreur = true;
-        });
-  });
