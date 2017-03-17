@@ -5,17 +5,15 @@ AWS.config.update({
 });
 var docClient = new AWS.DynamoDB.DocumentClient()
 
-exports.findByPseudo = function(pseudo, cb){
-  var table = "Joueur";
+exports.findByNom = function(nom, cb){
+  var table = "Equipe";
   var params = {
       TableName: table
   };
-
-  console.log("Requête DynamoDB pour joueur " + pseudo)
-
-  if (pseudo != "all"){
-    params.FilterExpression = "pseudo = :pseudo";
-    params.ExpressionAttributeValues = {':pseudo': pseudo}
+  console.log("Requête DynamoDB pour équipe " + nom)
+  if (nom != "all"){
+    params.FilterExpression = "nom_equipe = :nom";
+    params.ExpressionAttributeValues = {':nom': nom}
   }
 
   docClient.scan(params, function(err, data) {

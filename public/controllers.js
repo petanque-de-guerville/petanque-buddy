@@ -92,8 +92,8 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService) {
   .controller('JoueursCtrl', function($scope, joueurs) {
     $scope.page = "JOUEURS";
     $scope.joueurs = "Chargement...";
-    joueurs.liste().then(function(res){
-      $scope.joueurs = res;
+    joueurs.liste_joueurs().then(function(arr){
+      $scope.joueurs = arr;
     }, function(err){
       $scope.joueurs = "Erreur lors du chargement...";
     })
@@ -101,47 +101,29 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService) {
   .controller('EquipesCtrl', function($scope, equipes) {
       $scope.page = "ÉQUIPES";
       $scope.equipes = "Chargement...";
-      equipes.liste().then(function(res){
-        $scope.equipes = res;
+      equipes.liste_equipes().then(function(arr){
+        $scope.equipes = arr;
       }, function(err){
         $scope.equipes = "Erreur lors du chargement...";
       })
 })
-  .controller('FicheEquipeCtrl', function($scope, $routeParams, $resource, $q){
+  .controller('FicheEquipeCtrl', function($scope, $routeParams, equipes){
     $scope.nom_equipe = $routeParams.nom;
     $scope.done = false;
     $scope.erreur = false;
-    var fetch = function(){
-      var deferred = $q.defer();
-      $resource('/api/equipes/' + $routeParams.nom).get({},
-                                    function(r) {deferred.resolve(r);},
-                                    deferred.reject);
-      return deferred.promise;};
-    fetch().then(function(res){
-        $scope.done = true;
-        $scope.erreur = false;
-        $scope.equipe = res.Items[0];
-      }, function(err){
-        $scope.done = true;
-        $scope.erreur = true;
-        });
+
+    equipes.findByNom($routeParams.nom, function(e){
+      $scope.equipe = e;
+      $scope.done = true;
+    })
   })
-  .controller('FicheJoueurCtrl', function($scope, $routeParams, $resource, $q){
+  .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;
     $scope.erreur = false;
-    var fetch = function(){
-      var deferred = $q.defer();
-      $resource('/api/joueurs/' + $routeParams.pseudo).get({},
-                                    function(r) {deferred.resolve(r);},
-                                    deferred.reject);
-      return deferred.promise;};
-    fetch().then(function(res){
-        $scope.done = true;
-        $scope.erreur = false;
-        $scope.joueur = res.Items[0];
-      }, function(err){
-        $scope.done = true;
-        $scope.erreur = true;
-        });
+
+    joueurs.findByPseudo($routeParams.pseudo, function(j){
+      $scope.joueur = j
+      $scope.done = true;
+    })
   });

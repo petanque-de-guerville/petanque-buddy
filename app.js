@@ -63,25 +63,13 @@ app.get('/api/joueurs/:id', (req, res) => {
 });
 
 app.get('/api/equipes/:id', function(req, res) {
-  var table = "Equipe";
-  var params = {
-      TableName: table
-  };
-
-  if (req.params.id != "all"){
-      params.FilterExpression = "nom_equipe = :equipe";
-      params.ExpressionAttributeValues = {':equipe' : req.params.id};
-  }
-
-  docClient.scan(params, function(err, data) {
-      if (err) {
-          console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
-      } else {
-          console.log("Succès : requête pour les équipes !");
-          res.json(data);
-      }
-  });
-
+  BDD.equipes.findByNom(req.params.id, (err, equipe) => {
+    if (equipe){
+      return res.json(equipe)
+    } else {
+      return null
+    }
+  })
 });
 
 app.post('/login', function(req, res, next) {

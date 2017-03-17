@@ -42,30 +42,69 @@ MyApp.config(['$routeProvider', '$locationProvider',
   })
       .otherwise({ redirectTo: '/'});
     }])
-  .factory('joueurs', function($http, $resource){
-    var deferred = undefined
-    return {
-      liste: function() {
-          if (!deferred) {
-                deferred = $resource('/api/joueurs/all')
-                          .query()
-                          .$promise
-          }
-          return deferred
-          }}
-    })
- .factory('equipes', function($http, $resource){
-   var deferred = undefined
+ .factory('equipes', function($resource, $q){
+   var deja_requete = false
+   var dict = undefined
+   var liste = undefined
    return {
-     liste: function() {
-         if (!deferred) {
-               deferred = $resource('/api/equipes/all')
-                         .query()
-                         .$promise
+     liste_equipes: function() {
+         if (deja_requete) {
+           return $q.when(liste)
+         } else {
+           return $resource("/api/equipes/all")
+            .query()
+            .$promise
+            .then(function(res){
+              deja_requete = true
+              liste = res
+              dict = new Map(res.map((i) => [i.nom_equipe, i]));
+              return(liste)
+            })
          }
-         return deferred
-         }}
-   })
+       },
+     findByNom: function(nom, cb){
+       if (deja_requete){
+         return $q.when(dict).then(function(d){
+           cb(d.get(nom))
+         })
+       } else {
+         return this.liste_equipes().then(function(l){
+           cb(dict.get(nom))
+         })
+       }}
+   }})
+.factory('joueurs', function($resource, $q){
+ var deja_requete = false
+ var dict = undefined
+ var liste = undefined
+ return {
+   liste_joueurs: function() {
+       if (deja_requete) {
+         return $q.when(liste)
+       } else {
+         return $resource("/api/joueurs/all")
+          .query()
+          .$promise
+          .then(function(res){
+            deja_requete = true
+            liste = res
+            dict = new Map(res.map((i) => [i.pseudo, i]));
+            return(liste)
+          })
+       }
+     },
+   findByPseudo: function(pseudo, cb){
+     if (deja_requete){
+       return $q.when(dict).then(function(d){
+         cb(d.get(pseudo))
+       })
+     } else {
+       return this.liste_joueurs().then(function(l){
+         cb(dict.get(pseudo))
+       })
+     }}
+ }});
+
 
 MyApp.run(function ($rootScope, $location, $route, AuthService) {
           $rootScope.$on('$routeChangeStart',
