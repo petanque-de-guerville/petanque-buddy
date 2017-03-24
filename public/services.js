@@ -1,13 +1,15 @@
-angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
+angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http, profile) {
   // create user variable
   var user = null;
+  var currentUser = undefined
   // return available functions for use in the controllers
   return ({
     isLoggedIn: isLoggedIn,
     getUserStatus: getUserStatus,
     login: login,
     logout: logout,
-    register: register
+    register: register,
+    currentUser : function(){ return currentUser}
   });
 
   function isLoggedIn() {
@@ -47,6 +49,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
       .success(function (data, status) {
         if(status === 200 && data.status){
           user = true;
+          currentUser = username
           deferred.resolve();
         } else {
           console.log("Connexion refusée")
@@ -76,6 +79,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
       // handle success
       .success(function (data) {
         user = false;
+        currentUser = undefined
         deferred.resolve();
       })
       // handle error

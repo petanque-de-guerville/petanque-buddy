@@ -1,0 +1,17 @@
+<h1>Ma fiche </h1>
+
+Pseudo : {{profile.pseudo()}} </br>
+Fortune : {{profile.fortune()}} boyards </br>
+Équipe : {{profile.equipe()}} </br>
+ <md-button class="md-raised md-primary" ng-show="!changerMDP" ng-click="changerMDP = true;">Modifier mot de passe</md-button>
+
+<form ng-submit="changeMDP()" role="form" ng-show="changerMDP">
+            <label>Nouveau mot de passe</label>
+            <input type="password" ng-model="loginForm.password_1" ng-keypress="MDP_differents=false;" required />
+</br>
+            <label>Confirmation nouveau mot de passe</label>
+            <input type="password" ng-model="loginForm.password_2" ng-keypress="MDP_differents=false;" required />
+</br>
+            <md-button class="md-raised md-primary" type="submit">Modifier</md-button> 
+           	<span ng-show=MDP_differents> Les mots de passe ne correspondent pas.</span>	
+      <form>

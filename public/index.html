@@ -63,7 +63,9 @@
 
 
       <md-content layout="column">
-
+        <md-menu-item ng-show="estLoggue">
+          <a class="md-button" href="#/ma_fiche" ng-click="close()">Ma fiche</a>
+        </md-menu-item>        
         <md-menu-item>
           <a class="md-button" href="#/joueurs" ng-click="close()">Joueurs</a>
         </md-menu-item>
@@ -76,6 +78,10 @@
           <a class="md-button" href="#/matchs" ng-disabled="true" ng-click="close()">Matchs</a>
         </md-menu-item>
 <md-divider></md-divider>
+        <md-menu-item>
+          <a class="md-button" href="#/regles" ng-disabled="true" ng-click="close()">Règles</a>
+        </md-menu-item>
+
 <md-menu-item>
     <a class="md-button" href="#/parametres" ng-disabled="true" ng-click="close()">Paramètres</a>
 </md-menu-item>

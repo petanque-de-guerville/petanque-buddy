@@ -5,8 +5,10 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
     $scope.$watch(AuthService.isLoggedIn, function(newVal, oldVal){
       if (newVal){
         $scope.icone_connexion = "lock_open"
+        $scope.estLoggue = true
       } else {
         $scope.icone_connexion = "lock"
+        $scope.estLoggue = false
       }
     })
     $scope.toShow = "home";
@@ -36,13 +38,9 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
     }
 
   })
-  .controller("LoginCtrl", function($scope, AuthService, $location){
+.controller("LoginCtrl", function($scope, AuthService, $location, profile){
     $scope.login = function () {
-      if (AuthService.isLoggedIn()) {
-        AuthService.logout();
-        $location.path('/');
-      }
-      // initial values
+        // initial values
       $scope.error = false;
       $scope.disabled = true;
 
@@ -50,8 +48,9 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       AuthService.login($scope.loginForm.username, $scope.loginForm.password)
         // handle success
         .then(function () {
-          $location.path('/');
-          $scope.loginForm = {};
+          profile.init($scope.loginForm.username)
+          $location.path('/');          
+          $scope.loginForm = {}
         })
         // handle error
         .catch(function () {
@@ -59,10 +58,8 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
           $scope.errorMessage = "L'utilisateur et mot de passe ne correspondent pas.";
           $scope.disabled = false;
           $scope.loginForm = {};
-        });
-
-    }})
-  .controller('logoutController', ['$scope', '$location', 'AuthService',
+        })}})
+.controller('logoutController', ['$scope', '$location', 'AuthService',
     function ($scope, $location, AuthService) {
 
       $scope.logout = function () {
@@ -76,7 +73,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       };
 
   }])
-  .controller('RegisterCtrl',
+.controller('RegisterCtrl',
   ['$scope', '$location', 'AuthService',
   function ($scope, $location, AuthService) {
 
@@ -87,7 +84,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       $scope.disabled = true;
 
       // call register from service
-      AuthService.register($scope.registerForm.username, $scope.registerForm.password)
+      AuthService.register($scope.registerForm.pseudo, $scope.registerForm.password)
         // handle success
         .then(function () {
           $location.path('/login');
@@ -105,7 +102,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
     };
 
 }])
-  .controller('JoueursCtrl', function($scope, joueurs) {
+.controller('JoueursCtrl', function($scope, joueurs) {
     $scope.page = "JOUEURS";
     $scope.joueurs = "Chargement...";
     joueurs.liste_joueurs().then(function(arr){
@@ -114,16 +111,15 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       $scope.joueurs = "Erreur lors du chargement...";
     })
   })
-  .controller('EquipesCtrl', function($scope, equipes) {
+.controller('EquipesCtrl', function($scope, equipes) {
       $scope.page = "ÉQUIPES";
       $scope.equipes = "Chargement...";
       equipes.liste_equipes().then(function(arr){
         $scope.equipes = arr;
       }, function(err){
         $scope.equipes = "Erreur lors du chargement...";
-      })
-})
-  .controller('FicheEquipeCtrl', function($scope, $routeParams, equipes){
+      })})
+.controller('FicheEquipeCtrl', function($scope, $routeParams, equipes){
     $scope.nom_equipe = $routeParams.nom;
     $scope.done = false;
     $scope.erreur = false;
@@ -133,7 +129,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       $scope.done = true;
     })
   })
-  .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs){
+.controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;
     $scope.erreur = false;
@@ -142,4 +138,16 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       $scope.joueur = j
       $scope.done = true;
     })
-  });
+  })
+.controller('MaFicheCtrl', function($scope, profile){
+    $scope.profile = profile
+    $scope.changerMDP = false
+    $scope.MDP_differents = false
+    $scope.changeMDP = function(){
+      if ($scope.loginForm.password_1 != $scope.loginForm.password_2){
+        $scope.MDP_differents = true
+      } else {
+        console.log("Changer le mot de passe en BDD")
+      }
+    }
+  })

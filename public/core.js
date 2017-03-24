@@ -8,39 +8,44 @@ MyApp.config(['$routeProvider', '$locationProvider',
       controller: 'FicheJoueurCtrl',
       access: {restricted: true}
       })
-      .when('/joueurs', {
+    .when('/joueurs', {
         templateUrl: '/views/joueurs.html',
         controller: 'JoueursCtrl',
         access: {restricted: true}
         })
-      .when('/equipes/:nom', {
+    .when('/equipes/:nom', {
              templateUrl: '/views/fiche_equipe.html',
              controller: 'FicheEquipeCtrl',
              access: {restricted: true}
              })
-      .when('/equipes', {
+    .when('/equipes', {
           templateUrl: '/views/equipes.html',
           controller: 'EquipesCtrl',
           access: {restricted: true}
           })
-      .when('/', {
+    .when('/', {
           templateUrl: '/views/main.html',
           access: {restricted: false}})
-      .when('/login',{
+    .when('/login',{
         templateUrl: '/views/login.html',
         controller: 'LoginCtrl',
         access: {restricted: false}
         })
-      .when('/logout', {
+    .when('/logout', {
     controller: 'logoutController',
-    access: {restricted: false}
-  })
-  .when('/register', {
+    access: {restricted: true}
+    })
+    .when('/register', {
     templateUrl: 'views/register.html',
     controller: 'RegisterCtrl',
     access: {restricted: false}
-  })
-      .otherwise({ redirectTo: '/'});
+    })
+    .when('/ma_fiche', {
+      templateUrl:'/views/ma_fiche.html',
+      controller: 'MaFicheCtrl',
+      access: {restricted: true}
+    })
+    .otherwise({ redirectTo: '/'});
     }])
  .factory('equipes', function($resource, $q){
    var deja_requete = false
@@ -103,7 +108,33 @@ MyApp.config(['$routeProvider', '$locationProvider',
          cb(dict.get(pseudo))
        })
      }}
- }});
+ }})
+
+.factory('profile', function(joueurs){
+  
+  var pseudo = undefined
+  var fortune = undefined
+  var equipe = undefined
+  
+  var initProperties = function(user){
+  }
+
+  init = function(user){
+    joueurs.findByPseudo(user, function(res){
+          pseudo = res.pseudo
+          fortune = res.fortune
+          equipe = res.equipe
+    })    
+  }
+
+  return {
+    pseudo: function(){ return pseudo},
+    fortune: function(){ return fortune},
+    equipe: function(){ return equipe},
+    init: init
+  }
+})
+
 
 
 MyApp.run(function ($rootScope, $location, $route, AuthService) {
