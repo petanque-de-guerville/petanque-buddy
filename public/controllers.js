@@ -129,12 +129,13 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       $scope.done = true;
     })
   })
-.controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs){
+.controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, cotes){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;
     $scope.erreur = false;
 
     joueurs.findByPseudo($routeParams.pseudo, function(j){
+      j.cote = cotes.getOddsForPlayer(j.pseudo).cote;
       $scope.joueur = j
       $scope.done = true;
     })

@@ -3,7 +3,7 @@ Page des {{ page }} !
 <input type="search" ng-model="j" placeholder="Chercher une équipe..." aria-label="Chercher une équipe" />
 <ul>
   <li ng-repeat="equipe in equipes | filter:{'nom_equipe':j}">
-    <a ng-href="#/equipes/{{equipe.nom_equipe}}">{{equipe.nom_equipe}}</a> est constituée de :
+    <a ng-href="#/equipes/{{equipe.nom_equipe}}">{{equipe.nom_equipe}}</a> est composée de :
     <ul>
       <li ng-repeat="joueur in equipe.joueurs">
         <a ng-href="#/joueurs/{{joueur}}">{{joueur}}</a>

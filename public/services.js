@@ -117,6 +117,121 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     // return promise object
     return deferred.promise;
 
+  }}])
+.factory('equipes', function($resource, $q){
+   var deja_requete = false
+   var dict = undefined
+   var liste = undefined
+   return {
+     liste_equipes: function() {
+         if (deja_requete) {
+           return $q.when(liste)
+         } else {
+           return $resource("/api/equipes/all")
+            .query()
+            .$promise
+            .then(function(res){
+              deja_requete = true
+              liste = res
+              dict = new Map(res.map((i) => [i.nom_equipe, i]));
+              return(liste)
+            })
+         }
+       },
+     findByNom: function(nom, cb){
+       if (deja_requete){
+         return $q.when(dict).then(function(d){
+           cb(d.get(nom))
+         })
+       } else {
+         return this.liste_equipes().then(function(l){
+           cb(dict.get(nom))
+         })
+       }}
+   }})
+.factory('joueurs', function($resource, $q){
+ var deja_requete = false
+ var dict = undefined
+ var liste = undefined
+ return {
+   liste_joueurs: function() {
+       if (deja_requete) {
+         return $q.when(liste)
+       } else {
+         return $resource("/api/joueurs/all")
+          .query()
+          .$promise
+          .then(function(res){
+            deja_requete = true
+            liste = res
+            dict = new Map(res.map((i) => [i.pseudo, i]));
+            return(liste)
+          })
+       }
+     },
+   findByPseudo: function(pseudo, cb){
+     if (deja_requete){
+       return $q.when(dict).then(function(d){
+         cb(d.get(pseudo))
+       })
+     } else {
+       return this.liste_joueurs().then(function(l){
+         cb(dict.get(pseudo))
+       })
+     }}
+ }})
+.factory('profile', function(joueurs, cotes){
+  
+  var pseudo = undefined
+  var fortune = undefined
+  var equipe = undefined
+  var cote = undefined
+  
+  var initProperties = function(user){
   }
 
-}])
+  init = function(user){
+    joueurs.findByPseudo(user, function(res){
+          pseudo = res.pseudo
+          fortune = res.fortune
+          equipe = res.equipe
+          cote = cotes.getOddsForPlayer(res.pseudo).cote
+    })    
+  }
+
+  return {
+    pseudo: function(){ return pseudo},
+    fortune: function(){ return fortune},
+    equipe: function(){ return equipe},
+    cote: function(){return cote},
+    init: init
+  }})
+.factory('cotes', function(){
+  getAggregatedOddsForTeam = function(team){
+    // Fonction triviale
+    // En attente de la gestion des cotes
+
+    return {cote_equipe: Math.round(100 * ((Math.random()*3)+1))/100}
+  }
+
+  getOddsForGame = function(eq1, eq2){
+    // Fonction triviale
+    // En attente de la gestion des cotes
+    var odds1 = getAggregatedOddsForTeam(eq1).cote_equipe;
+    var odds2 = getAggregatedOddsForTeam(eq2).cote_equipe;
+    var coeff = 1 / (1 / odds1 + 1 / odds2);
+    return {cotes: [ 1 / (coeff * 1 / odds1), 1 / (coeff * 1 / odds2)]}
+  }
+
+
+  getOddsForPlayer = function(pseudo){
+    // Fonction triviale
+    // En attente de la gestion des cotes
+
+    return {cote: Math.round(100 * ((Math.random()*3)+1))/100}
+  }
+
+  return {
+    getOddsForGame: getOddsForGame,
+    getOddsForPlayer: getOddsForPlayer
+  }})
