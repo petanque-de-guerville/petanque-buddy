@@ -214,11 +214,11 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     return {cote_equipe: Math.round(100 * ((Math.random()*3)+1))/100}
   }
 
-  getOddsForGame = function(eq1, eq2){
+  getOddsForGame = function(teams){
     // Fonction triviale
     // En attente de la gestion des cotes
-    var odds1 = getAggregatedOddsForTeam(eq1).cote_equipe;
-    var odds2 = getAggregatedOddsForTeam(eq2).cote_equipe;
+    var odds1 = getAggregatedOddsForTeam(teams[0]).cote_equipe;
+    var odds2 = getAggregatedOddsForTeam(teams[1]).cote_equipe;
     var coeff = 1 / (1 / odds1 + 1 / odds2);
     return {cotes: [ 1 / (coeff * 1 / odds1), 1 / (coeff * 1 / odds2)]}
   }

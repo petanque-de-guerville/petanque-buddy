@@ -70,9 +70,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
             $location.path('/login');
           });
 
-      };
-
-  }])
+      };}])
 .controller('RegisterCtrl',
   ['$scope', '$location', 'AuthService',
   function ($scope, $location, AuthService) {
@@ -99,9 +97,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
           $scope.registerForm = {};
         });
 
-    };
-
-}])
+    };}])
 .controller('JoueursCtrl', function($scope, joueurs) {
     $scope.page = "JOUEURS";
     $scope.joueurs = "Chargement...";
@@ -109,8 +105,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       $scope.joueurs = arr;
     }, function(err){
       $scope.joueurs = "Erreur lors du chargement...";
-    })
-  })
+    })})
 .controller('EquipesCtrl', function($scope, equipes) {
       $scope.page = "ÉQUIPES";
       $scope.equipes = "Chargement...";
@@ -127,8 +122,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
     equipes.findByNom($routeParams.nom, function(e){
       $scope.equipe = e;
       $scope.done = true;
-    })
-  })
+    })})
 .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, cotes){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;
@@ -138,8 +132,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       j.cote = cotes.getOddsForPlayer(j.pseudo).cote;
       $scope.joueur = j
       $scope.done = true;
-    })
-  })
+    }) })
 .controller('MaFicheCtrl', function($scope, profile){
     $scope.profile = profile
     $scope.changerMDP = false
@@ -150,5 +143,4 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       } else {
         console.log("Changer le mot de passe en BDD")
       }
-    }
-  })
+    }})
