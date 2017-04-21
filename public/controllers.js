@@ -144,3 +144,19 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
         console.log("Changer le mot de passe en BDD")
       }
     }})
+.controller('MatchsCtrl', function($scope, matchs){
+    $scope.done = false;
+    $scope.erreur = false;
+
+    $scope.matchs = matchs;
+    $scope.matchs.liste_matchs().then(
+      function(array){
+        $scope.done = true;
+        $scope.erreur = false;
+        $scope.liste_matchs = array;
+      },
+      function(err){
+        $scope.erreur = true;
+        $scope.done = true;
+        console.log("Erreur lors du chargement de la liste des matchs...")})
+    })

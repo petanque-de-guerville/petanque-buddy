@@ -45,6 +45,11 @@ MyApp.config(['$routeProvider', '$locationProvider',
       controller: 'MaFicheCtrl',
       access: {restricted: true}
     })
+    .when('/matchs', {
+      templateUrl:'/views/matchs.html',
+      controller: 'MatchsCtrl',
+      access: {restricted: true}
+    })
     .otherwise({ redirectTo: '/'});
     }]);
 

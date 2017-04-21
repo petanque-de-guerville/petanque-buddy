@@ -6,10 +6,16 @@ Menu
 
 * ajouter des icônes devant chacun des items
 
-Page Matchs
--------
+Service Matchs
+--------
 
-* créer la page
+* remplacer le code statique par une lecture en BDD
+
+
+Page Fiche Équipe
+------
+
+* lister les matchs et les heures de passage
 
 Cotes
 ----

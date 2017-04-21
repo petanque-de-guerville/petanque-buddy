@@ -235,3 +235,18 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     getOddsForGame: getOddsForGame,
     getOddsForPlayer: getOddsForPlayer
   }})
+.factory('matchs', function($q){
+  var liste = [{equipes: ['Les Fans de Ragoût', 'Les Castors'],
+                    horaire_prevu: '13:50'},
+                    {equipes: ['Les Castors', 'Les Papillons de lumière'],
+                    horaire_prevu: '14:05'},
+                    {equipes: ['Les Fans de Ragoût', 'Les Papillons de lumière'],
+                    horaire_prevu: '14:20'}];
+  return {
+    en_cours: {equipes: ['Les Fans de Ragoût', 'Les Castors']},
+    prochain: {equipes: ['Les Castors', 'Les Papillons de lumière'],
+               horaire_prevu: '14:05'},
+    liste_matchs: function(){
+      return $q.when(liste);
+    }
+  }})
