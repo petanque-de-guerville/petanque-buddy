@@ -144,9 +144,18 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
         console.log("Changer le mot de passe en BDD")
       }
     }})
-.controller('MatchsCtrl', function($scope, matchs, $q){
+.controller('MatchsCtrl', function($scope, matchs, $q, cotes){
     $scope.done = false;
     $scope.erreur = false;
+    $scope.format_cotes_match = function(match){
+      if( match.cotes){
+        return(match.cotes)
+      }
+
+      var cotes_ce_match = cotes.formatOddsForGame(match.equipes, ', ', 2)
+      match.cotes = cotes_ce_match
+      return cotes_ce_match
+    }
 
     $q.all([matchs.liste_matchs(), 
             matchs.en_cours(),
@@ -155,8 +164,12 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
         $scope.done = true;
         $scope.erreur = false;
         $scope.liste_matchs = array[0];
+
         $scope.match_en_cours = array[1];
+        $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)
+        
         $scope.prochain_match = array[2];
+        $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
       },
       function(err){
         $scope.erreur = true;

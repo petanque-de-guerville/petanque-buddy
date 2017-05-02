@@ -231,9 +231,17 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     return {cote: Math.round(100 * ((Math.random()*3)+1))/100}
   }
 
+  formatOddsForGame = function(teams, sep, nb_dec){
+    if (typeof(sep)==='undefined') sep = ",";
+    if (typeof(nb_dec)==='undefined') nb_dec = 2;
+    var cotes = getOddsForGame(teams).cotes
+    return ' ' + Math.round(cotes[0] * 10**nb_dec)/10**nb_dec + sep + ' ' + Math.round(cotes[1] * 10**nb_dec)/10**nb_dec
+  }
+
   return {
     getOddsForGame: getOddsForGame,
-    getOddsForPlayer: getOddsForPlayer
+    getOddsForPlayer: getOddsForPlayer,
+    formatOddsForGame: formatOddsForGame
   }})
 .factory('matchs', function($q){
   var liste = [{equipes: ['Les Fans de Ragoût', 'Les Castors'],
