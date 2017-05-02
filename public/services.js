@@ -237,15 +237,23 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   }})
 .factory('matchs', function($q){
   var liste = [{equipes: ['Les Fans de Ragoût', 'Les Castors'],
-                    horaire_prevu: '13:50'},
-                    {equipes: ['Les Castors', 'Les Papillons de lumière'],
-                    horaire_prevu: '14:05'},
-                    {equipes: ['Les Fans de Ragoût', 'Les Papillons de lumière'],
-                    horaire_prevu: '14:20'}];
+                    horaire_prevu: '13:50',
+                    score: [ 0, 0]},
+                {equipes: ['Les Castors', 'Les Papillons de lumière'],
+                    horaire_prevu: '14:05',
+                    score: [ 0, 0]},
+                {equipes: ['Les Fans de Ragoût', 'Les Papillons de lumière'],
+                    horaire_prevu: '14:30',
+                    score: [ 0, 0]}];
+  var idx_match_en_cours = 0;
+  var idx_prochain_match = 1;
   return {
-    en_cours: {equipes: ['Les Fans de Ragoût', 'Les Castors']},
-    prochain: {equipes: ['Les Castors', 'Les Papillons de lumière'],
-               horaire_prevu: '14:05'},
+    en_cours: function(){
+      return $q.when(liste[idx_match_en_cours]);
+    },
+    prochain: function(){
+      return $q.when(liste[idx_prochain_match]);
+    },
     liste_matchs: function(){
       return $q.when(liste);
     }

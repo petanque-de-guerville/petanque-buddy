@@ -1,14 +1,15 @@
 <h1>Matchs </h1>
 
-<div>
-<div>Le match en cours oppose <a ng-href="#/equipes/{{matchs.en_cours.equipes[0]}}">{{matchs.en_cours.equipes[0]}}</a> à <a ng-href="#/equipes/{{matchs.en_cours.equipes[1]}}">{{matchs.en_cours.equipes[1]}}</a></div>
 
-<div>Le prochain match opposera <a ng-href="#/equipes/{{matchs.prochain.equipes[0]}}">{{matchs.prochain.equipes[0]}}</a> à <a ng-href="#/equipes/{{matchs.prochain.equipes[1]}}">{{matchs.prochain.equipes[1]}}</a>. L'horaire prévu est {{matchs.prochain.horaire_prevu}}.</div>
-</div>
 
 <span ng-if="!done">Chargement...</span>
 <span ng-if="erreur">Erreur !</span>
 <span ng-if="done && !erreur">
+<div>
+<div>Le match en cours oppose <a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> à <a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a>.</div>
+
+<div>Le prochain match opposera <a ng-href="#/equipes/{{prochain_match.equipes[0]}}">{{prochain_match.equipes[0]}}</a> à <a ng-href="#/equipes/{{prochain_match.equipes[1]}}">{{prochain_match.equipes[1]}}</a>. L'horaire prévu est {{prochain_match.horaire_prevu}}.</div>
+</div>
     <ul>
       <li ng-repeat="match in liste_matchs">
         <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a> vs. <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a> à {{match.horaire_prevu}}.
