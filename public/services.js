@@ -276,6 +276,12 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     prochain: function(){
       return liste_matchs()
               .then(function(res){ return res[idx_prochain_match]})
+    },
+    prochain_match_de: function(equipe){
+      return liste_matchs()
+              .then(function(res){ return res.find(function(match){
+                return match.equipes[0] == equipe || match.equipes[1] == equipe 
+              }) })
     }
   }
 })

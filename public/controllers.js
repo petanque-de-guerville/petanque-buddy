@@ -112,7 +112,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       }, function(err){
         $scope.equipes = "Erreur lors du chargement...";
       })})
-.controller('FicheEquipeCtrl', function($scope, $routeParams, equipes){
+.controller('FicheEquipeCtrl', function($scope, $routeParams, equipes, matchs){
     $scope.nom_equipe = $routeParams.nom;
     $scope.done = false;
     $scope.erreur = false;
@@ -120,6 +120,11 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
     equipes.findByNom($routeParams.nom, function(e){
       $scope.equipe = e;
       $scope.done = true;
+    })
+
+    matchs.prochain_match_de($scope.nom_equipe).then(function(match){
+      $scope.prochain_match = { "adversaire": (match.equipes[0] == $scope.nom_equipe) ? match.equipes[1] : match.equipes[0],
+                                "horaire": match.horaire_prevu}
     })})
 .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, cotes){
     $scope.pseudo = $routeParams.pseudo;
@@ -162,7 +167,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
         
         $scope.done = true;
         $scope.erreur = false;
-        
+
         $scope.liste_matchs = array[0];
         $scope.match_en_cours =  array[1]
         $scope.prochain_match =  array[2]

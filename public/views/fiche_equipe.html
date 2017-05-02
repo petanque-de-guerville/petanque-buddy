@@ -8,4 +8,5 @@ L'équipe '{{nom_equipe}}' est constituée de : </br>
       <li ng-repeat="joueur in equipe.joueurs">
         <a ng-href="#/joueurs/{{joueur}}">{{joueur}}</a> 
       </li>
-    </ul> <br></span>
+    </ul> <br>
+ Le prochain match est contre <a ng-href="#/equipes/{{prochain_match.adversaire}}">{{prochain_match.adversaire}}</a>  à {{prochain_match.horaire}} (heure approximative).</span>
