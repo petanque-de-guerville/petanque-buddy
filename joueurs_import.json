@@ -2,46 +2,55 @@
     {
       "pseudo": "alice",
       "equipe": "Les Castors",
-      "fortune": 100
+      "fortune": 100,
+      "password": "alice"
     },
     {
       "pseudo": "bob",
       "equipe": "Les Castors",
-      "fortune":84
+      "fortune":84,
+      "password": "bob"
     },
     {
       "pseudo": "chloe",
       "equipe": "Les Castors",
-      "fortune": 98
+      "fortune": 98,
+      "password": "chloe"
     },
     {
       "pseudo": "daniel",
       "equipe": "Les Fans de Ragoût",
-      "fortune": 34
+      "fortune": 34,
+      "password": "daniel"
     },
     {
       "pseudo": "elise",
       "equipe": "Les Fans de Ragoût",
-      "fortune": 103
+      "fortune": 103,
+      "password": "else"
     },
     {
       "pseudo": "flore",
       "equipe": "Les Fans de Ragoût",
-      "fortune": 98
+      "fortune": 98,
+      "password": "flore"
     },
     {
       "pseudo": "gwladys",
       "equipe": "Les Papillons de lumière",
-      "fortune": 100
+      "fortune": 100,
+      "password": "gwladys"
     },
     {
       "pseudo": "hector",
       "equipe": "Les Papillons de lumière",
-      "fortune": 80
+      "fortune": 80,
+      "password": "hector"
     },
     {
       "pseudo": "isidore",
       "equipe": "Les Papillons de lumière",
-      "fortune": 70
+      "fortune": 70,
+      "password": "isidore"
     }
 ]

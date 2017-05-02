@@ -9,7 +9,7 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 
-console.log("Ajout de jour à la BDD. Patientez...");
+console.log("Ajout de données à la BDD. Patientez...");
 console.log("---- Import joueurs ----");
 var allPlayers = JSON.parse(fs.readFileSync('joueurs_import.json', 'utf8'));
 allPlayers.forEach(function(joueur) {
@@ -18,7 +18,8 @@ allPlayers.forEach(function(joueur) {
         Item: {
             "pseudo":  joueur.pseudo,
             "equipe": joueur.equipe,
-            "fortune":  joueur.fortune
+            "fortune":  joueur.fortune,
+            "password": joueur.password
         }
     };
 
@@ -52,3 +53,26 @@ allTeams.forEach(function(equipe) {
        }
     });
 });
+
+console.log("---- Import matchs ----");
+var allGames = JSON.parse(fs.readFileSync('matchs_import.json', 'utf8'));
+allGames.forEach(function(match) {
+    var params = {
+        TableName: "Match",
+        Item: {
+            "annee":  match.annee,
+            "equipes": match.equipes,
+            "horaire_prevu": match.horaire_prevu,
+            "score": match.score
+        }
+    };
+
+    docClient.put(params, function(err, data) {
+       if (err) {
+           console.error("Unable to add game", match.equipes, ". Error JSON:", JSON.stringify(err, null, 2));
+       } else {
+           console.log("PutItem succeeded:", match.equipes);
+       }
+    });
+});
+

@@ -72,6 +72,19 @@ app.get('/api/equipes/:id', function(req, res) {
   })
 });
 
+app.get('/api/matchs/:annee/:horaire_prevu', function(req, res) {
+  BDD.matchs.findByDate({annee: req.params.id, 
+                         horaire_prevu: req.params.horaire_prevu}, (err, match) => {
+    if (match){
+      return res.json(match)
+    } else {
+      return null
+    }
+  })
+});
+
+
+
 app.post('/login', function(req, res, next) {
   console.log("Demande d'authentification pour " + req.body.username);
   passport.authenticate('local', function(err, user, info) {

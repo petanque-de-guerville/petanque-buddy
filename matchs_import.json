@@ -1,0 +1,12 @@
+[{"annee":"2017",
+    "equipes": ["Les Fans de Ragoût", "Les Castors"],
+    "horaire_prevu": "13:50",
+    "score": [ 0, 0]},
+  {"annee":"2017",
+      "equipes": ["Les Castors", "Les Papillons de lumière"],
+      "horaire_prevu": "14:05",
+      "score": [ 0, 0]},
+  {"annee":"2017",
+      "equipes": ["Les Fans de Ragoût", "Les Papillons de lumière"],
+      "horaire_prevu": "14:30",
+      "score": [ 0, 0]}]

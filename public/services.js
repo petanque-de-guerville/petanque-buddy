@@ -243,26 +243,39 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     getOddsForPlayer: getOddsForPlayer,
     formatOddsForGame: formatOddsForGame
   }})
-.factory('matchs', function($q){
-  var liste = [{equipes: ['Les Fans de Ragoût', 'Les Castors'],
-                    horaire_prevu: '13:50',
-                    score: [ 0, 0]},
-                {equipes: ['Les Castors', 'Les Papillons de lumière'],
-                    horaire_prevu: '14:05',
-                    score: [ 0, 0]},
-                {equipes: ['Les Fans de Ragoût', 'Les Papillons de lumière'],
-                    horaire_prevu: '14:30',
-                    score: [ 0, 0]}];
+.factory('matchs', function($q, $resource){
+  var liste = undefined
   var idx_match_en_cours = 0;
   var idx_prochain_match = 1;
+
+
+  var liste_matchs = function(){
+      if (!liste){
+        var deferred = $q.defer()
+
+        $resource("/api/matchs/2017/all")
+          .query()
+          .$promise
+          .then(function(res){
+            liste = res
+            deferred.resolve(liste)
+          })
+
+        liste = deferred.promise;
+      }
+    
+      return $q.when(liste)
+  }
+
   return {
+    liste_matchs: liste_matchs,
     en_cours: function(){
-      return $q.when(liste[idx_match_en_cours]);
+      return liste_matchs()
+              .then(function(res){ return res[idx_match_en_cours]})
     },
     prochain: function(){
-      return $q.when(liste[idx_prochain_match]);
-    },
-    liste_matchs: function(){
-      return $q.when(liste);
+      return liste_matchs()
+              .then(function(res){ return res[idx_prochain_match]})
     }
-  }})
+  }
+})

@@ -35,9 +35,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       } else {
         $location.path("/login")
       }
-    }
-
-  })
+    } })
 .controller("LoginCtrl", function($scope, AuthService, $location, profile){
     $scope.login = function () {
         // initial values
@@ -157,23 +155,23 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       return cotes_ce_match
     }
 
-    $q.all([matchs.liste_matchs(), 
+    $q.all([matchs.liste_matchs(),
             matchs.en_cours(),
-            matchs.prochain()]).then(
-      function(array){
+            matchs.prochain()]).then(function(array){
+        
+        
         $scope.done = true;
         $scope.erreur = false;
-        $scope.liste_matchs = array[0];
-
-        $scope.match_en_cours = array[1];
-        $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)
         
-        $scope.prochain_match = array[2];
+        $scope.liste_matchs = array[0];
+        $scope.match_en_cours =  array[1]
+        $scope.prochain_match =  array[2]
+        
+        $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
         $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
-      },
-      function(err){
+        
+      }, function(err){
         $scope.erreur = true;
         $scope.done = true;
         console.log("Erreur lors du chargement de la liste des matchs...")})
-
-    })
+})
