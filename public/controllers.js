@@ -150,6 +150,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
 .controller('MatchsCtrl', function($scope, matchs, $q, cotes){
     $scope.done = false;
     $scope.erreur = false;
+    $scope.pas_de_match_en_cours = true
     $scope.format_cotes_match = function(match){
       if( match.cotes){
         return(match.cotes)
@@ -169,10 +170,14 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
         $scope.erreur = false;
 
         $scope.liste_matchs = array[0];
-        $scope.match_en_cours =  array[1]
+        if (array[1] != undefined){
+          $scope.pas_de_match_en_cours = false
+          $scope.match_en_cours =  array[1]
+          $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
+        }
         $scope.prochain_match =  array[2]
         
-        $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
+        
         $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
         
       }, function(err){

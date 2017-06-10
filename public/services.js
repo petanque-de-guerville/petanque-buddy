@@ -245,9 +245,6 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   }})
 .factory('matchs', function($q, $resource){
   var liste = undefined
-  var idx_match_en_cours = 0;
-  var idx_prochain_match = 1;
-
 
   var liste_matchs = function(){
       if (!liste){
@@ -257,6 +254,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           .query()
           .$promise
           .then(function(res){
+            console.log("Accès BD pour matchs")
             liste = res
             deferred.resolve(liste)
           })
@@ -271,17 +269,25 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     liste_matchs: liste_matchs,
     en_cours: function(){
       return liste_matchs()
-              .then(function(res){ return res[idx_match_en_cours]})
+              .then(function(res){ return res.find( function(match){
+                return (match.en_cours == "1")
+              })})
     },
     prochain: function(){
       return liste_matchs()
-              .then(function(res){ return res[idx_prochain_match]})
+              .then(function(res){ return res.find( function(match){
+                return (match.en_cours == "0" && match.fini == "0")
+              })})
     },
     prochain_match_de: function(equipe){
       return liste_matchs()
               .then(function(res){ return res.find(function(match){
-                return match.equipes[0] == equipe || match.equipes[1] == equipe 
+                return ((match.equipes[0] == equipe || match.equipes[1] == equipe) && match.en_cours != "0" && match.fini != "0")
               }) })
+    },
+    matchs_de: function(equipe){
+      return liste_matchs()
+              .then(function(res){})
     }
   }
 })

@@ -6,7 +6,7 @@
 <span ng-if="erreur">Erreur !</span>
 <span ng-if="done && !erreur">
 <div>
-<div>Le match en cours oppose <a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> à <a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> (cotes : {{cotes_en_cours_formatees}}).</div>
+<div><span ng-if="pas_de_match_en_cours">Il n'y a pas de match en cours.</span><span ng-if="!pas_de_match_en_cours">Le match en cours oppose <a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> à <a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> (cotes : {{cotes_en_cours_formatees}}).</div></span>
 
 <div>Le prochain match opposera <a ng-href="#/equipes/{{prochain_match.equipes[0]}}">{{prochain_match.equipes[0]}}</a> à <a ng-href="#/equipes/{{prochain_match.equipes[1]}}">{{prochain_match.equipes[1]}}</a> (cotes : {{cotes_prochain_formatees}}). L'horaire prévu est {{prochain_match.horaire_prevu}}.</div>
 </div>
