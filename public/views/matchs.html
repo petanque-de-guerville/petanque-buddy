@@ -10,6 +10,7 @@
 
 <div>Le prochain match opposera <a ng-href="#/equipes/{{prochain_match.equipes[0]}}">{{prochain_match.equipes[0]}}</a> à <a ng-href="#/equipes/{{prochain_match.equipes[1]}}">{{prochain_match.equipes[1]}}</a> (cotes : {{cotes_prochain_formatees}}). L'horaire prévu est {{prochain_match.horaire_prevu}}.</div>
 </div>
+Programme des matchs :
     <ul>
       <li ng-repeat="match in liste_matchs">
         <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a> vs. <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a> à {{match.horaire_prevu}}. Cotes : {{format_cotes_match(match)}}.

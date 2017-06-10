@@ -52,5 +52,59 @@
       "equipe": "Les Papillons de lumière",
       "fortune": 70,
       "password": "isidore"
+    },
+        {
+      "pseudo": "joachim",
+      "equipe": "Les matelots du commandant Couston",
+      "fortune": 60,
+      "password": "joachim"
+    },
+    {
+      "pseudo": "kevina",
+      "equipe": "Les matelots du commandant Couston",
+      "fortune": 110,
+      "password": "kevina"
+    },
+    {
+      "pseudo": "laurentine",
+      "equipe": "Les matelots du commandant Couston",
+      "fortune": 20,
+      "password": "laurentine"
+    },
+    {
+      "pseudo": "marthe",
+      "equipe": "Les poseurs de lapin",
+      "fortune": 93,
+      "password": "marthe"
+    },
+    {
+      "pseudo": "naëlle",
+      "equipe": "Les poseurs de lapin",
+      "fortune": 64,
+      "password": "naëlle"
+    },
+    {
+      "pseudo": "oscar",
+      "equipe": "Les poseurs de lapin",
+      "fortune": 89,
+      "password": "oscar"
+    },
+    {
+      "pseudo": "paule",
+      "equipe": "Les joueurs de banjo",
+      "fortune": 10,
+      "password": "paule"
+    },
+    {
+      "pseudo": "quentin",
+      "equipe": "Les joueurs de banjo",
+      "fortune": 100,
+      "password": "quentin"
+    },
+    {
+      "pseudo": "ruth",
+      "equipe": "Les joueurs de banjo",
+      "fortune": 50,
+      "password": "ruth"
     }
 ]

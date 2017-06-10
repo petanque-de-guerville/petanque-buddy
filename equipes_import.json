@@ -16,5 +16,24 @@
       "nom_equipe": "Les Papillons de lumière",
       "joueurs":  ["gwladys", "hector", "isidore"],
       "classement" : 0
+    },
+    {
+      "annee":2017,
+      "nom_equipe": "Les matelots du commandant Couston",
+      "joueurs":  ["joachim", "kevina", "laurentine"],
+      "classement" : 0
+    },
+    {
+      "annee":2017,
+      "nom_equipe": "Les poseurs de lapin",
+      "joueurs":  ["marthe", "naëlle", "oscar"],
+      "classement" : 0
+    },
+    {
+      "annee":2017,
+      "nom_equipe": "Les joueurs de banjo",
+      "joueurs":  ["paule", "quentin", "ruth"],
+      "classement" : 0
     }
+
 ]
