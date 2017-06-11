@@ -6,9 +6,10 @@ Menu
 * ajouter des icônes devant chacun des items
 
 
-Page Fiche Équipe
+
+Page Matchs
 ------
-* lister les matchs et les heures de passage
+* possibilité de démarrer un match pour un admin
 
 Cotes
 ----

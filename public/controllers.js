@@ -125,7 +125,14 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
     matchs.prochain_match_de($scope.nom_equipe).then(function(match){
       $scope.prochain_match = { "adversaire": (match.equipes[0] == $scope.nom_equipe) ? match.equipes[1] : match.equipes[0],
                                 "horaire": match.horaire_prevu}
-    })})
+    })
+
+    matchs.matchs_de($scope.nom_equipe).then(function(matchs_de){
+      $scope.liste_matchs = matchs_de
+    })
+
+
+  })
 .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, cotes){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;

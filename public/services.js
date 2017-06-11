@@ -282,12 +282,12 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     prochain_match_de: function(equipe){
       return liste_matchs()
               .then(function(res){ return res.find(function(match){
-                return ((match.equipes[0] == equipe || match.equipes[1] == equipe) && match.en_cours != "0" && match.fini != "0")
+                return ((match.equipes[0] == equipe || match.equipes[1] == equipe) && match.en_cours == "0" && match.fini == "0")
               }) })
     },
     matchs_de: function(equipe){
       return liste_matchs()
-              .then(function(res){})
+              .then(function(res){ return res.filter( (el) => (el.equipes[0] == equipe || el.equipes[1] == equipe)) })
     }
   }
 })
