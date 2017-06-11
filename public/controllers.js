@@ -1,6 +1,11 @@
 var MyApp = angular.module("MyApp");
 
-MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location) {
+MyApp.controller('mainCtrl', function($scope, profile, matchs){ 
+    $scope.nom_joueur = profile.pseudo()
+    matchs.prochain_match_de(profile.equipe()).then(function(match){
+      $scope.prochain_match = { "horaire": match.horaire_prevu}
+    })})
+.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location) {
 
     $scope.$watch(AuthService.isLoggedIn, function(newVal, oldVal){
       if (newVal){
@@ -46,9 +51,10 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
       AuthService.login($scope.loginForm.username, $scope.loginForm.password)
         // handle success
         .then(function () {
-          profile.init($scope.loginForm.username)
-          $location.path('/');          
-          $scope.loginForm = {}
+          profile.init($scope.loginForm.username, function(){          
+            $location.path('/');          
+            $scope.loginForm = {}
+          })
         })
         // handle error
         .catch(function () {
@@ -129,10 +135,7 @@ MyApp.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location
 
     matchs.matchs_de($scope.nom_equipe).then(function(matchs_de){
       $scope.liste_matchs = matchs_de
-    })
-
-
-  })
+    })})
 .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, cotes){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;

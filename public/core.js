@@ -24,6 +24,7 @@ MyApp.config(['$routeProvider', '$locationProvider',
           access: {restricted: true}
           })
     .when('/', {
+          controller: 'mainCtrl',
           templateUrl: '/views/main.html',
           access: {restricted: false}})
     .when('/login',{

@@ -1,4 +1,4 @@
-angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http, profile) {
+angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
   // create user variable
   var user = null;
   var currentUser = undefined
@@ -187,15 +187,13 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   var equipe = undefined
   var cote = undefined
   
-  var initProperties = function(user){
-  }
-
-  init = function(user){
+  init = function(user, cb){
     joueurs.findByPseudo(user, function(res){
           pseudo = res.pseudo
           fortune = res.fortune
           equipe = res.equipe
           cote = cotes.getOddsForPlayer(res.pseudo).cote
+          cb()
     })    
   }
 
