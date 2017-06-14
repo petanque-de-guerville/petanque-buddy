@@ -26,10 +26,6 @@ exports.findByDate = function(date, cb){
 }
 
 exports.insererPari = function(obj, cb){
-  // console.log("Pseudo : " + obj.pseudo)
-  // cb("Erreur", null)
-
-  
   
 
   obj.match.paris[obj.num_equipe] = obj.match.paris[obj.num_equipe] + obj.mise
@@ -50,7 +46,6 @@ exports.insererPari = function(obj, cb){
       } else {
           console.log("Mise à jour des paris du match " + obj.match.equipes[0] + " vs. " + obj.match.equipes[1] + 
             " par " + obj.pseudo)
-          console.log("Attention : la mise n'est pas décomptée de " + obj.pseudo)
           return cb(err, data)
       }
   });

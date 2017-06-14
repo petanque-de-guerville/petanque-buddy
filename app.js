@@ -91,7 +91,15 @@ app.post('/api/paris', function(req, res, next) {
 
                           (err, data) => {
                             if (data){
-                              return res.status(200).json({status: "Pari inséré."})
+                              BDD.joueurs.addFortune({pseudo: req.body.pseudo,
+                                                      nb_boyards: -req.body.mise}, 
+                                                      (err, data) => {
+                                                        if (data){
+                                                          return res.status(200).json({status: "Pari inséré et fortune joueur mise à jour"})
+                                                        } else {
+                                                          return res.status(500).json({status: "Erreur lors de la mise à jour de la fortune de " + req.body.pseudo})
+                                                        }
+                              })
                             } else {
                               return res.status(500).json({status: "Erreur. Pari non inséré."})
                             }
