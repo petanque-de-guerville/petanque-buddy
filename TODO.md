@@ -10,6 +10,8 @@ Menu
 Page Matchs
 ------
 * possibilité de démarrer un match pour un admin
+* afficher combien de boyards encore dispo
+* rafraichir la page (par intervalle, en tirant la page vers le bas ?)
 
 Cotes
 ----
@@ -23,6 +25,8 @@ Paris
 * Définir les paris possibles
 	* vainqueur du match
 	* match nul
+* afficher les gains potentiels (avec les paris en cours)
+* à la fin d'un match, payer les paris gagnants
 
 Divers
 -----

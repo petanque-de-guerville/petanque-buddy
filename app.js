@@ -83,6 +83,20 @@ app.get('/api/matchs/:annee/:horaire_prevu', function(req, res) {
   })
 });
 
+app.post('/api/paris', function(req, res, next) {
+  BDD.matchs.insererPari({match: req.body.match,
+                          num_equipe: req.body.num_equipe,
+                          mise: req.body.mise,
+                          pseudo: req.body.pseudo}, 
+
+                          (err, data) => {
+                            if (data){
+                              return res.status(200).json({status: "Pari inséré."})
+                            } else {
+                              return res.status(500).json({status: "Erreur. Pari non inséré."})
+                            }
+                          })
+})
 
 
 app.post('/login', function(req, res, next) {
@@ -108,6 +122,8 @@ app.post('/login', function(req, res, next) {
     });
   })(req, res, next);
 });
+
+
 
 app.get('/logout', function(req, res) {
   req.logout();

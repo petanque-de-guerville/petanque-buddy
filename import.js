@@ -65,7 +65,8 @@ allGames.forEach(function(match) {
             "horaire_prevu": match.horaire_prevu,
             "score": match.score,
             "en_cours": match.en_cours,
-            "fini": match.fini
+            "fini": match.fini,
+            "paris": match.paris
         }
     };
 

@@ -2,9 +2,10 @@ var MyApp = angular.module("MyApp");
 
 MyApp.controller('mainCtrl', function($scope, profile, matchs){ 
     $scope.nom_joueur = profile.pseudo()
-    matchs.prochain_match_de(profile.equipe()).then(function(match){
-      $scope.prochain_match = { "horaire": match.horaire_prevu}
-    })})
+    if ($scope.nom_joueur != undefined) {
+      matchs.prochain_match_de(profile.equipe()).then(function(match){
+      $scope.prochain_match = { "horaire": match.horaire_prevu}})
+    } })
 .controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location) {
 
     $scope.$watch(AuthService.isLoggedIn, function(newVal, oldVal){
@@ -157,10 +158,35 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
         console.log("Changer le mot de passe en BDD")
       }
     }})
-.controller('MatchsCtrl', function($scope, matchs, $q, cotes){
+.controller('MatchsCtrl', function($scope, matchs, $q, cotes, profile, $mdDialog, paris){
     $scope.done = false;
     $scope.erreur = false;
     $scope.pas_de_match_en_cours = true
+    
+    $scope.pari_plus_un = function(match_pari, num_equipe){
+      var match = $scope.liste_matchs.find( function(m){ return m.equipes[0] == match_pari.equipes[0] && 
+                                                                m.equipes[1] == match_pari.equipes[1]})
+
+      if (profile.getFortune() > 0){
+        paris.ajouter_pari(match, num_equipe, profile.pseudo())
+             .then(function(){        
+                match.paris[num_equipe] = match.paris[num_equipe] + 1
+                profile.addToFortune(-1)
+              })
+      } else {
+        $mdDialog.show(
+           $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title('Pari impossible !')
+                    .textContent('Plus assez de boyards !')
+                    .ariaLabel('Alerte : plus assez de boyards')
+                    .ok('OK'))
+      }
+    }
+  
+
+
     $scope.format_cotes_match = function(match){
       if( match.cotes){
         return(match.cotes)
@@ -174,7 +200,6 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
     $q.all([matchs.liste_matchs(),
             matchs.en_cours(),
             matchs.prochain()]).then(function(array){
-        
         
         $scope.done = true;
         $scope.erreur = false;
@@ -193,5 +218,5 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
       }, function(err){
         $scope.erreur = true;
         $scope.done = true;
-        console.log("Erreur lors du chargement de la liste des matchs...")})
-})
+        console.log("Erreur lors du chargement de la liste des matchs...")})})
+.controller('parierCtrl', function(){})

@@ -199,7 +199,9 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
 
   return {
     pseudo: function(){ return pseudo},
-    fortune: function(){ return fortune},
+    addToFortune: function(inc){ fortune = fortune + inc},
+    setFortune: function(new_f){ fortune = new_f},
+    getFortune: function(){ return fortune},
     equipe: function(){ return equipe},
     cote: function(){return cote},
     init: init
@@ -252,7 +254,6 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           .query()
           .$promise
           .then(function(res){
-            console.log("Accès BD pour matchs")
             liste = res
             deferred.resolve(liste)
           })
@@ -287,5 +288,30 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
       return liste_matchs()
               .then(function(res){ return res.filter( (el) => (el.equipes[0] == equipe || el.equipes[1] == equipe)) })
     }
-  }
+  }})
+.factory('paris', function($q, $http){
+  return {maj: function(){},
+          ajouter_pari: function(match, num_equipe, pseudo){
+                var deferred = $q.defer();
+                $http.post('/api/paris', {match: match,
+                                          num_equipe: num_equipe,
+                                          mise: 1,
+                                          pseudo: pseudo})
+                      // handle success
+                      .success(function (data, status) {
+                        if(status === 200 && data.status){
+                          console.log("Insertion réussie.")
+                          deferred.resolve();
+                        } else {
+                          console.log("Insertion échouée bien que retour de fonction réussi.")
+                          deferred.reject();
+                        }})
+                      // handle error
+                      .error(function (data) {
+                        console.log("Insertion échouée.")
+                        deferred.reject();
+                      })
+                return deferred.promise
+              }
+        }
 })

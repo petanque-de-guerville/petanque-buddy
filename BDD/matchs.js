@@ -24,3 +24,35 @@ exports.findByDate = function(date, cb){
       return cb(err, data.Items)
   });
 }
+
+exports.insererPari = function(obj, cb){
+  // console.log("Pseudo : " + obj.pseudo)
+  // cb("Erreur", null)
+
+  
+  
+
+  obj.match.paris[obj.num_equipe] = obj.match.paris[obj.num_equipe] + obj.mise
+  console.log("Écriture DynamoDB pour match " + obj.match.equipes[0] + " vs. " + obj.match.equipes[1] + "(" + obj.match.annee+ ")")
+  var params = {
+    TableName: "Match",
+    Key:{
+      "annee": obj.match.annee,
+      "horaire_prevu": obj.match.horaire_prevu
+    },
+    UpdateExpression: "set paris = :paris",
+    ExpressionAttributeValues: {':paris': obj.match.paris}
+  }
+
+  docClient.update(params, function(err, data) {
+      if (err) {
+          console.error("Mise à jour du match échouée. Erreur JSON:", JSON.stringify(err, null, 2));
+      } else {
+          console.log("Mise à jour des paris du match " + obj.match.equipes[0] + " vs. " + obj.match.equipes[1] + 
+            " par " + obj.pseudo)
+          console.log("Attention : la mise n'est pas décomptée de " + obj.pseudo)
+          return cb(err, data)
+      }
+  });
+
+}
