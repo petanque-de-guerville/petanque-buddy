@@ -162,16 +162,15 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
     $scope.done = false;
     $scope.erreur = false;
     $scope.pas_de_match_en_cours = true
-    
-    $scope.pari_plus_un = function(match_pari, num_equipe){
-      var match = $scope.liste_matchs.find( function(m){ return m.equipes[0] == match_pari.equipes[0] && 
-                                                                m.equipes[1] == match_pari.equipes[1]})
+    $scope.fortune = profile.getFortune();
 
+    $scope.pari_plus_un = function(match, num_equipe){
       if (profile.getFortune() > 0){
         paris.ajouter_pari(match, num_equipe, profile.pseudo())
              .then(function(){        
                 match.paris[num_equipe] = match.paris[num_equipe] + 1
                 profile.addToFortune(-1)
+                $scope.fortune = profile.getFortune()
               })
       } else {
         $mdDialog.show(
