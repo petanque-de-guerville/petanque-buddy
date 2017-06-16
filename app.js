@@ -83,27 +83,37 @@ app.get('/api/matchs/:annee/:horaire_prevu', function(req, res) {
   })
 });
 
-app.post('/api/paris', function(req, res, next) {
-  BDD.matchs.insererPari({match: req.body.match,
+app.post('/api/paris/issue_match', function(req, res, next) {
+  BDD.matchs.modifieMises({match: req.body.match,
                           num_equipe: req.body.num_equipe,
                           mise: req.body.mise,
                           pseudo: req.body.pseudo}, 
 
                           (err, data) => {
-                            if (data){
-                              BDD.joueurs.addFortune({pseudo: req.body.pseudo,
-                                                      nb_boyards: -req.body.mise}, 
-                                                      (err, data) => {
-                                                        if (data){
-                                                          return res.status(200).json({status: "Pari inséré et fortune joueur mise à jour"})
-                                                        } else {
-                                                          return res.status(500).json({status: "Erreur lors de la mise à jour de la fortune de " + req.body.pseudo})
-                                                        }
-                              })
-                            } else {
-                              return res.status(500).json({status: "Erreur. Pari non inséré."})
-                            }
-                          })
+  if (data){
+    BDD.joueurs.addFortune({pseudo: req.body.pseudo,
+                            nb_boyards: -req.body.mise}, 
+                            (err, data) => {
+      if (data){
+        BDD.paris.inserePari({match: req.body.match,
+                          num_equipe: req.body.num_equipe,
+                          mise: req.body.mise,
+                          pseudo: req.body.pseudo},
+          (err, data) => {
+            if (data){
+              return res.status(200).json({status: "Pari inséré et fortune joueur mise à jour"})
+            } else {
+              return res.status(500).json({status: "Erreur lors de l'insertion du pari."})
+            }
+          })
+      } else {
+        return res.status(500).json({status: "Erreur lors de la mise à jour de la fortune de " + req.body.pseudo})
+      }
+    })
+  } else {
+    return res.status(500).json({status: "Erreur. Mises sur le match non mises à jour."})
+  }
+})
 })
 
 

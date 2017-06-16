@@ -254,7 +254,15 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           .query()
           .$promise
           .then(function(res){
-            liste = res
+            liste = res.sort(function compare(a, b) {
+                  if (a.horaire_prevu < b.horaire_prevu)
+                     return -1;
+                  if (a.horaire_prevu > b.horaire_prevu)
+                     return 1;
+                  
+                  console.log("Erreur : deux matchs à la même heure !")
+                  return 0;
+                })
             deferred.resolve(liste)
           })
 
@@ -293,10 +301,10 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   return {maj: function(){},
           ajouter_pari: function(match, num_equipe, pseudo){
                 var deferred = $q.defer();
-                $http.post('/api/paris', {match: match,
-                                          num_equipe: num_equipe,
-                                          mise: 1,
-                                          pseudo: pseudo})
+                $http.post('/api/paris/issue_match', {match: match,
+                                                      num_equipe: num_equipe,
+                                                      mise: 1,
+                                                      pseudo: pseudo})
                       // handle success
                       .success(function (data, status) {
                         if(status === 200 && data.status){

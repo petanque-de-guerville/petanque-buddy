@@ -1,5 +1,6 @@
 var AWS = require("aws-sdk");
 var fs = require('fs');
+var uuid = require("node-uuid")
 
 AWS.config.update({
     region: "us-west-2",
@@ -60,6 +61,7 @@ allGames.forEach(function(match) {
     var params = {
         TableName: "Match",
         Item: {
+            "ID": uuid.v4(),
             "annee":  match.annee,
             "equipes": match.equipes,
             "horaire_prevu": match.horaire_prevu,

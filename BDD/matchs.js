@@ -25,7 +25,7 @@ exports.findByDate = function(date, cb){
   });
 }
 
-exports.insererPari = function(obj, cb){
+exports.modifieMises = function(obj, cb){
   
 
   obj.match.paris[obj.num_equipe] = obj.match.paris[obj.num_equipe] + obj.mise
@@ -33,8 +33,7 @@ exports.insererPari = function(obj, cb){
   var params = {
     TableName: "Match",
     Key:{
-      "annee": obj.match.annee,
-      "horaire_prevu": obj.match.horaire_prevu
+      "ID": obj.match.ID
     },
     UpdateExpression: "set paris = :paris",
     ExpressionAttributeValues: {':paris': obj.match.paris}
