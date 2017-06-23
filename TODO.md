@@ -6,11 +6,8 @@ Menu
 * ajouter des icônes devant chacun des items
 
 
-
 Page Matchs
 ------
-* possibilité de démarrer un match pour un admin
-* afficher combien de boyards encore dispo
 * rafraichir la page (par intervalle, en tirant la page vers le bas ?)
 
 Cotes
@@ -46,4 +43,3 @@ Page Ma fiche
 
 BDD
 -----
-* Gérer différemment les index : par année c'est pas une bonne idée car ça ne répartit pas les enregistrements d'une même année dans plusieurs partitions et donc ne permet pas une bonne répartition de la charge lors d'accès concurrents. Utiliser plutôt les noms des équipes, etc.

@@ -72,7 +72,7 @@ app.get('/api/equipes/:id', function(req, res) {
   })
 });
 
-app.get('/api/matchs/:annee/:horaire_prevu', function(req, res) {
+app.get('/api/matchs/lire/:annee/:horaire_prevu', function(req, res) {
   BDD.matchs.findByDate({annee: req.params.id, 
                          horaire_prevu: req.params.horaire_prevu}, (err, match) => {
     if (match){
@@ -82,6 +82,35 @@ app.get('/api/matchs/:annee/:horaire_prevu', function(req, res) {
     }
   })
 });
+
+app.get('/api/matchs/demarrer/:id', function(req, res) {
+  return BDD.matchs.stopper((err, data) => {
+    if (err){
+      return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter."})
+    } else {
+      BDD.matchs.demarrer({id: req.params.id}, (err, data) => {
+        if (data){
+          return res.status(200).json(data)
+        } else {
+          return res.status(500).json({status: "Erreur lors du démarrage du match " + req.params.id})
+        }
+      })    
+    }
+
+  })
+});
+
+app.get('/api/matchs/stopper/', function(req, res) {
+  return BDD.matchs.stopper((err, data) => {
+    if (err){
+      return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter : " + JSON.stringify(err)})
+    } else {
+      return res.status(200).json({status: "Match arrêté avec succès." + data.Attributes.id})
+    }
+  })
+});
+
+
 
 app.post('/api/paris/issue_match', function(req, res, next) {
   BDD.matchs.modifieMises({match: req.body.match,

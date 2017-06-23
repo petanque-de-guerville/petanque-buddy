@@ -6,8 +6,12 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
       matchs.prochain_match_de(profile.equipe()).then(function(match){
       $scope.prochain_match = { "horaire": match.horaire_prevu}})
     } })
-.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location) {
+.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile) {
 
+    $scope.$on('user:updated', function(event,data) {
+      $scope.estAdmin = profile.est("admin")
+    });
+    
     $scope.$watch(AuthService.isLoggedIn, function(newVal, oldVal){
       if (newVal){
         $scope.icone_connexion = "lock_open"
@@ -27,7 +31,7 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
       $mdSidenav('left').close();
     };
 
-
+    
 
     $scope.show = function (toShow) {
       $scope.toShow = toShow;
@@ -203,7 +207,7 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
         $scope.done = true;
         $scope.erreur = false;
 
-        $scope.liste_matchs = array[0];
+        $scope.liste_matchs = array[0].filter(function(elt){ return (elt.fini == 0)});
         if (array[1] != undefined){
           $scope.pas_de_match_en_cours = false
           $scope.match_en_cours =  array[1]
@@ -219,3 +223,38 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
         $scope.done = true;
         console.log("Erreur lors du chargement de la liste des matchs...")})})
 .controller('parierCtrl', function(){})
+.controller('AdminCtrl', function(matchs, $q, $scope){
+    $scope.demarrer_match = function(){
+      matchs.demarrer_prochain_match().then(function(){ controle_des_matchs()})
+    }
+
+    $scope.arreter_match_en_cours = function(){
+      matchs.arreter_match_en_cours().then(function(){ controle_des_matchs()})
+    }
+
+    var controle_des_matchs = function(){
+      $scope.done = false;
+      $scope.erreur = false;
+      $scope.pas_de_match_en_cours = true
+
+     $q.all([matchs.en_cours(),
+            matchs.prochain()]).then(function(array){
+        
+        $scope.done = true;
+        $scope.erreur = false;
+
+        if (array[0] != undefined){
+          $scope.pas_de_match_en_cours = false
+          $scope.match_en_cours =  array[0]
+        }
+        
+        if (array[1] != undefined){
+          $scope.prochain_match =  array[1]
+        }
+      }, function(err){
+        $scope.erreur = true;
+        $scope.done = true;
+        console.log("Erreur lors du chargement des matchs...")})}
+
+    controle_des_matchs()
+})

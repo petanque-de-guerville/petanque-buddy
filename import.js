@@ -20,7 +20,8 @@ allPlayers.forEach(function(joueur) {
             "pseudo":  joueur.pseudo,
             "equipe": joueur.equipe,
             "fortune":  joueur.fortune,
-            "password": joueur.password
+            "password": joueur.password,
+            "role": joueur.role
         }
     };
 

@@ -3,108 +3,126 @@
       "pseudo": "alice",
       "equipe": "Les Castors",
       "fortune": 100,
-      "password": "alice"
+      "password": "alice",
+      "role": ["joueur"]
     },
     {
       "pseudo": "bob",
       "equipe": "Les Castors",
       "fortune":84,
-      "password": "bob"
+      "password": "bob",
+      "role": ["admin", "joueur"]
     },
     {
       "pseudo": "chloe",
       "equipe": "Les Castors",
       "fortune": 98,
-      "password": "chloe"
+      "password": "chloe",
+      "role": ["joueur"]
     },
     {
       "pseudo": "daniel",
       "equipe": "Les Fans de Ragoût",
       "fortune": 34,
-      "password": "daniel"
+      "password": "daniel",
+      "role": ["joueur"]
     },
     {
       "pseudo": "elise",
       "equipe": "Les Fans de Ragoût",
       "fortune": 103,
-      "password": "else"
+      "password": "elise",
+      "role": ["joueur"]
     },
     {
       "pseudo": "flore",
       "equipe": "Les Fans de Ragoût",
       "fortune": 98,
-      "password": "flore"
+      "password": "flore",
+      "role": ["joueur"]
     },
     {
       "pseudo": "gwladys",
       "equipe": "Les Papillons de lumière",
       "fortune": 100,
-      "password": "gwladys"
+      "password": "gwladys",
+      "role": ["joueur"]
     },
     {
       "pseudo": "hector",
       "equipe": "Les Papillons de lumière",
       "fortune": 80,
-      "password": "hector"
+      "password": "hector",
+      "role": ["joueur"]
     },
     {
       "pseudo": "isidore",
       "equipe": "Les Papillons de lumière",
       "fortune": 70,
-      "password": "isidore"
+      "password": "isidore",
+      "role": ["joueur"]
     },
         {
       "pseudo": "joachim",
       "equipe": "Les matelots du commandant Couston",
       "fortune": 60,
-      "password": "joachim"
+      "password": "joachim",
+      "role": ["joueur"]
     },
     {
       "pseudo": "kevina",
       "equipe": "Les matelots du commandant Couston",
       "fortune": 110,
-      "password": "kevina"
+      "password": "kevina",
+      "role": ["joueur"]
     },
     {
       "pseudo": "laurentine",
       "equipe": "Les matelots du commandant Couston",
       "fortune": 20,
-      "password": "laurentine"
+      "password": "laurentine",
+      "role": ["joueur"]
     },
     {
       "pseudo": "marthe",
       "equipe": "Les poseurs de lapin",
       "fortune": 93,
-      "password": "marthe"
+      "password": "marthe",
+      "role": ["joueur"]
     },
     {
       "pseudo": "naëlle",
       "equipe": "Les poseurs de lapin",
       "fortune": 64,
-      "password": "naëlle"
+      "password": "naëlle",
+      "role": ["joueur"]
     },
     {
       "pseudo": "oscar",
       "equipe": "Les poseurs de lapin",
       "fortune": 89,
-      "password": "oscar"
+      "password": "oscar",
+      "role": ["joueur"]
     },
     {
       "pseudo": "paule",
       "equipe": "Les joueurs de banjo",
       "fortune": 10,
-      "password": "paule"
+      "password": "paule",
+      "role": ["joueur"]
     },
     {
       "pseudo": "quentin",
       "equipe": "Les joueurs de banjo",
       "fortune": 100,
-      "password": "quentin"
+      "password": "quentin",
+      "role": ["joueur"]
     },
     {
       "pseudo": "ruth",
       "equipe": "Les joueurs de banjo",
       "fortune": 50,
-      "password": "ruth"
+      "password": "ruth",
+      "role": ["joueur"]
     }
 ]

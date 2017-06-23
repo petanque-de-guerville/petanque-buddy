@@ -51,6 +51,11 @@ MyApp.config(['$routeProvider', '$locationProvider',
       controller: 'MatchsCtrl',
       access: {restricted: true}
     })
+    .when('/admin', {
+      templateUrl: '/views/admin.html',
+      controller: 'AdminCtrl',
+      access: {restricted: true}
+    })
     .otherwise({ redirectTo: '/'});
     }]);
 

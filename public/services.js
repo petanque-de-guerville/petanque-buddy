@@ -180,12 +180,13 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
        })
      }}
  }})
-.factory('profile', function(joueurs, cotes){
+.factory('profile', function(joueurs, cotes, $rootScope){
   
   var pseudo = undefined
   var fortune = undefined
   var equipe = undefined
   var cote = undefined
+  var role = undefined
   
   init = function(user, cb){
     joueurs.findByPseudo(user, function(res){
@@ -193,6 +194,8 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           fortune = res.fortune
           equipe = res.equipe
           cote = cotes.getOddsForPlayer(res.pseudo).cote
+          role = res.role
+          $rootScope.$broadcast('user:updated')
           cb()
     })    
   }
@@ -204,6 +207,12 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     getFortune: function(){ return fortune},
     equipe: function(){ return equipe},
     cote: function(){return cote},
+    role: function(){ return role},
+    est: function(role_test){ 
+      if (role != undefined) {
+          return role.includes(role_test)
+      } 
+      else return false},
     init: init
   }})
 .factory('cotes', function(){
@@ -245,12 +254,13 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   }})
 .factory('matchs', function($q, $resource){
   var liste = undefined
+  var update_needed = true
 
   var liste_matchs = function(){
-      if (!liste){
+      if (update_needed){
         var deferred = $q.defer()
 
-        $resource("/api/matchs/2017/all")
+        $resource("/api/matchs/lire/2017/all")
           .query()
           .$promise
           .then(function(res){
@@ -260,9 +270,10 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                   if (a.horaire_prevu > b.horaire_prevu)
                      return 1;
                   
-                  console.log("Erreur : deux matchs à la même heure !")
+                  console.log("Erreur : deux matchs à la même heure !" + JSON.stringify(a) + " " + JSON.stringify(b))
                   return 0;
                 })
+            update_needed = false
             deferred.resolve(liste)
           })
 
@@ -272,6 +283,35 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
       return $q.when(liste)
   }
 
+  var prochain = function(){
+      return liste_matchs()
+              .then(function(res){ return res.find( function(match){
+                return (match.en_cours == "0" && match.fini == "0")
+              })})
+  }
+
+  var demarrer_match = function(id_match){
+    return $resource("/api/matchs/demarrer/" + id_match)
+          .get()
+          .$promise
+          .then(function(res){
+            console.log(JSON.stringify(res))
+            update_needed = true
+            return res
+          })
+  }
+
+  var arreter_match_en_cours = function(){
+      return $resource("/api/matchs/stopper/")
+            .get()
+            .$promise
+            .then(function(res){
+              console.log(JSON.stringify(res))
+              update_needed = true
+              return res
+            })
+    }
+
   return {
     liste_matchs: liste_matchs,
     en_cours: function(){
@@ -280,12 +320,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                 return (match.en_cours == "1")
               })})
     },
-    prochain: function(){
-      return liste_matchs()
-              .then(function(res){ return res.find( function(match){
-                return (match.en_cours == "0" && match.fini == "0")
-              })})
-    },
+    prochain: prochain,
     prochain_match_de: function(equipe){
       return liste_matchs()
               .then(function(res){ return res.find(function(match){
@@ -295,8 +330,15 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     matchs_de: function(equipe){
       return liste_matchs()
               .then(function(res){ return res.filter( (el) => (el.equipes[0] == equipe || el.equipes[1] == equipe)) })
-    }
-  }})
+    },
+    demarrer_prochain_match: function(){
+      return  prochain().then(function(match) {
+                return demarrer_match(match.ID)
+              })
+    },
+    arreter_match_en_cours: arreter_match_en_cours
+  }
+})
 .factory('paris', function($q, $http){
   return {maj: function(){},
           ajouter_pari: function(match, num_equipe, pseudo){
