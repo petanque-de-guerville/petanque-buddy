@@ -174,8 +174,8 @@ MyApp
       cluster: 'eu',
       encrypted: true
     })
-    var channel = pusher.subscribe('my-channel')
-    channel.bind('my-event', function(data) {
+    var channel = pusher.subscribe('MAJ')
+    channel.bind('MAJ_matchs', function(data) {
       console.log("Reçu notif mise à jour back end")
       matchs.refresh().then(affichage_matchs);
     });

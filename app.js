@@ -6,6 +6,8 @@ var session = require('express-session')
 var LocalStrategy = require('passport-local').Strategy;
 var path = require('path');
 var BDD = require('./BDD')
+
+// NOTIFICATIONS
 var Pusher = require('pusher');
 var pusher = new Pusher({
   appId: '357504',
@@ -13,7 +15,10 @@ var pusher = new Pusher({
   secret: '8d4b8b4f4fcf029757b3',
   cluster: 'eu',
   encrypted: true
-});
+})
+var pushNotifDelay = 1000 * 10
+var Notifications = {}
+Notifications.matchs = 0
 
 
 
@@ -138,9 +143,7 @@ app.post('/api/paris/issue_match', function(req, res, next) {
                           pseudo: req.body.pseudo},
           (err, data) => {
             if (data){
-              pusher.trigger('my-channel', 'my-event', {
-                "message": "Paris mis à jour"
-              })
+              Notifications.matchs = 1
               return res.status(200).json({status: "Pari inséré et fortune joueur mise à jour"})
             } else {
               return res.status(500).json({status: "Erreur lors de l'insertion du pari."})
@@ -231,3 +234,16 @@ app.get('/profile',
 app.listen(3000, "192.168.0.23", function () {
   console.log('Petanque-buddy écoute sur le port 3000...')
 })
+
+
+
+
+
+// NOTIFICATIONS
+setInterval(function(){
+  if (Notifications.matchs == 1){
+    Notifications.matchs = 0
+    pusher.trigger('MAJ', 'MAJ_matchs', {})
+    console.log("Push envoyé.")
+  }
+}, pushNotifDelay)
