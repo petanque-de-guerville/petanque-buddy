@@ -1,2 +1,5 @@
 <div ng-if="nom_joueur == undefined"> Connecte-toi dans le menu à gauche. </div>
-<div ng-if="nom_joueur != undefined"> {{nom_joueur}}, ton prochain match est à {{prochain_match.horaire}}.</div>
+<div ng-if="nom_joueur != undefined"> {{nom_joueur}}, 
+	<span ng-if="prochain_match == null"> tu n'as pas de matchs prévus.</span>
+	<span ng-if="prochain_match != null"> ton prochain match est à {{prochain_match.horaire}}.</span>
+</div>

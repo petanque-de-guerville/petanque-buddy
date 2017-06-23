@@ -4,8 +4,14 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
     $scope.nom_joueur = profile.pseudo()
     if ($scope.nom_joueur != undefined) {
       matchs.prochain_match_de(profile.equipe()).then(function(match){
-      $scope.prochain_match = { "horaire": match.horaire_prevu}})
-    } })
+        if (match != null){
+          $scope.prochain_match = { "horaire": match.horaire_prevu}
+        } else {
+          $scope.prochain_match = null
+        }
+      })
+    }
+  })
 .controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile) {
 
     $scope.$on('user:updated', function(event,data) {
