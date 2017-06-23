@@ -1,6 +1,7 @@
 var MyApp = angular.module("MyApp");
 
-MyApp.controller('mainCtrl', function($scope, profile, matchs){ 
+MyApp
+.controller('mainCtrl', function($scope, profile, matchs){ 
     $scope.nom_joueur = profile.pseudo()
     if ($scope.nom_joueur != undefined) {
       matchs.prochain_match_de(profile.equipe()).then(function(match){
@@ -10,8 +11,7 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
           $scope.prochain_match = null
         }
       })
-    }
-  })
+    }})
 .controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile) {
 
     $scope.$on('user:updated', function(event,data) {
@@ -219,10 +219,11 @@ MyApp.controller('mainCtrl', function($scope, profile, matchs){
           $scope.match_en_cours =  array[1]
           $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
         }
-        $scope.prochain_match =  array[2]
         
-        
-        $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
+        if (array[2] != undefined){
+          $scope.prochain_match =  array[2]
+          $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
+        }
         
       }, function(err){
         $scope.erreur = true;
