@@ -280,16 +280,12 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
         liste = deferred.promise;
       }
     
-      return $q.when(liste)
-  }
-
+      return $q.when(liste)}
   var prochain = function(){
       return liste_matchs()
               .then(function(res){ return res.find( function(match){
                 return (match.en_cours == "0" && match.fini == "0")
-              })})
-  }
-
+              })})}
   var demarrer_match = function(id_match){
     return $resource("/api/matchs/demarrer/" + id_match)
           .get()
@@ -298,9 +294,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
             console.log(JSON.stringify(res))
             update_needed = true
             return res
-          })
-  }
-
+          })}
   var arreter_match_en_cours = function(){
       return $resource("/api/matchs/stopper/")
             .get()
@@ -309,8 +303,12 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
               console.log(JSON.stringify(res))
               update_needed = true
               return res
-            })
-    }
+            })}
+  var refresh = function(){
+    update_needed = true
+    return $q.all([liste_matchs()]).then(function(array){
+              update_needed = false
+            })}
 
   return {
     liste_matchs: liste_matchs,
@@ -318,28 +316,24 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
       return liste_matchs()
               .then(function(res){ return res.find( function(match){
                 return (match.en_cours == "1")
-              })})
-    },
+              })})},
     prochain: prochain,
     prochain_match_de: function(equipe){
       return liste_matchs()
               .then(function(res){ return res.find(function(match){
                 return ((match.equipes[0] == equipe || match.equipes[1] == equipe) && match.en_cours == "0" && match.fini == "0")
-              }) })
-    },
+              }) })},
     matchs_de: function(equipe){
       return liste_matchs()
-              .then(function(res){ return res.filter( (el) => (el.equipes[0] == equipe || el.equipes[1] == equipe)) })
-    },
+              .then(function(res){ return res.filter( (el) => (el.equipes[0] == equipe || el.equipes[1] == equipe)) })},
     demarrer_prochain_match: function(){
       return  prochain().then(function(match) {
                 return demarrer_match(match.ID)
-              })
-    },
-    arreter_match_en_cours: arreter_match_en_cours
-  }
-})
-.factory('paris', function($q, $http){
+              })},
+    arreter_match_en_cours: arreter_match_en_cours,
+    refresh: refresh
+  }})
+.factory('paris', function($q, $http, matchs){
   return {maj: function(){},
           ajouter_pari: function(match, num_equipe, pseudo){
                 var deferred = $q.defer();
@@ -363,5 +357,4 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                       })
                 return deferred.promise
               }
-        }
-})
+        }})

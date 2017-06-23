@@ -169,6 +169,18 @@ MyApp
       }
     }})
 .controller('MatchsCtrl', function($scope, matchs, $q, cotes, profile, $mdDialog, paris){
+    
+    var pusher = new Pusher('b238d890f5ce582a1916', {
+      cluster: 'eu',
+      encrypted: true
+    })
+    var channel = pusher.subscribe('my-channel')
+    channel.bind('my-event', function(data) {
+      console.log("Reçu notif mise à jour back end")
+      matchs.refresh().then(affichage_matchs);
+    });
+
+
     $scope.done = false;
     $scope.erreur = false;
     $scope.pas_de_match_en_cours = true
@@ -178,8 +190,7 @@ MyApp
       if (profile.getFortune() > 0){
         paris.ajouter_pari(match, num_equipe, profile.pseudo())
              .then(function(){        
-                match.paris[num_equipe] = match.paris[num_equipe] + 1
-                profile.addToFortune(-1)
+                profile.addToFortune(-1) // Pas besoin de faire une mise à jour pushée car seul cet utilisateur est impacté
                 $scope.fortune = profile.getFortune()
               })
       } else {
@@ -191,11 +202,7 @@ MyApp
                     .textContent('Plus assez de boyards !')
                     .ariaLabel('Alerte : plus assez de boyards')
                     .ok('OK'))
-      }
-    }
-  
-
-
+      }}
     $scope.format_cotes_match = function(match){
       if( match.cotes){
         return(match.cotes)
@@ -203,32 +210,34 @@ MyApp
 
       var cotes_ce_match = cotes.formatOddsForGame(match.equipes, ', ', 2)
       match.cotes = cotes_ce_match
-      return cotes_ce_match
-    }
+      return cotes_ce_match}
+    var affichage_matchs = function(){
+      $q.all([matchs.liste_matchs(),
+              matchs.en_cours(),
+              matchs.prochain()]).then(function(array){
+          
+          $scope.done = true;
+          $scope.erreur = false;
 
-    $q.all([matchs.liste_matchs(),
-            matchs.en_cours(),
-            matchs.prochain()]).then(function(array){
-        
-        $scope.done = true;
-        $scope.erreur = false;
+          $scope.liste_matchs = array[0].filter(function(elt){ return (elt.fini == 0)});
+          if (array[1] != undefined){
+            $scope.pas_de_match_en_cours = false
+            $scope.match_en_cours =  array[1]
+            $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
+          }
+          
+          if (array[2] != undefined){
+            $scope.prochain_match =  array[2]
+            $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
+          }
+          
+        }, function(err){
+          $scope.erreur = true;
+          $scope.done = true;
+          console.log("Erreur lors du chargement de la liste des matchs...")})}
 
-        $scope.liste_matchs = array[0].filter(function(elt){ return (elt.fini == 0)});
-        if (array[1] != undefined){
-          $scope.pas_de_match_en_cours = false
-          $scope.match_en_cours =  array[1]
-          $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
-        }
-        
-        if (array[2] != undefined){
-          $scope.prochain_match =  array[2]
-          $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
-        }
-        
-      }, function(err){
-        $scope.erreur = true;
-        $scope.done = true;
-        console.log("Erreur lors du chargement de la liste des matchs...")})})
+    affichage_matchs()
+})
 .controller('parierCtrl', function(){})
 .controller('AdminCtrl', function(matchs, $q, $scope){
     $scope.demarrer_match = function(){

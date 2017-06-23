@@ -6,6 +6,14 @@ var session = require('express-session')
 var LocalStrategy = require('passport-local').Strategy;
 var path = require('path');
 var BDD = require('./BDD')
+var Pusher = require('pusher');
+var pusher = new Pusher({
+  appId: '357504',
+  key: 'b238d890f5ce582a1916',
+  secret: '8d4b8b4f4fcf029757b3',
+  cluster: 'eu',
+  encrypted: true
+});
 
 
 
@@ -130,6 +138,9 @@ app.post('/api/paris/issue_match', function(req, res, next) {
                           pseudo: req.body.pseudo},
           (err, data) => {
             if (data){
+              pusher.trigger('my-channel', 'my-event', {
+                "message": "Paris mis à jour"
+              })
               return res.status(200).json({status: "Pari inséré et fortune joueur mise à jour"})
             } else {
               return res.status(500).json({status: "Erreur lors de l'insertion du pari."})
