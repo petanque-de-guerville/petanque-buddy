@@ -62,7 +62,7 @@ MyApp
       AuthService.login($scope.loginForm.username, $scope.loginForm.password)
         // handle success
         .then(function () {
-          profile.init($scope.loginForm.username, function(){          
+          profile.init($scope.loginForm.username).then(function(res){          
             $location.path('/');          
             $scope.loginForm = {}
           })
@@ -134,9 +134,10 @@ MyApp
     $scope.done = false;
     $scope.erreur = false;
 
-    equipes.findByNom($routeParams.nom, function(e){
+    equipes.findByNom($routeParams.nom).then(function(e){
       $scope.equipe = e;
       $scope.done = true;
+      return e
     })
 
     matchs.prochain_match_de($scope.nom_equipe).then(function(match){
@@ -152,8 +153,7 @@ MyApp
     $scope.done = false;
     $scope.erreur = false;
 
-    joueurs.findByPseudo($routeParams.pseudo, function(j){
-      j.cote = cotes.getOddsForPlayer(j.pseudo).cote;
+    joueurs.findByPseudo($routeParams.pseudo).then(function(j){
       $scope.joueur = j
       $scope.done = true;
     }) })
@@ -204,13 +204,10 @@ MyApp
                     .ok('OK'))
       }}
     $scope.format_cotes_match = function(match){
-      if( match.cotes){
-        return(match.cotes)
-      }
+      return cotes.formatOddsForGame(match, ', ', 2)
+    }
+      
 
-      var cotes_ce_match = cotes.formatOddsForGame(match.equipes, ', ', 2)
-      match.cotes = cotes_ce_match
-      return cotes_ce_match}
     var affichage_matchs = function(){
       $q.all([matchs.liste_matchs(),
               matchs.en_cours(),
@@ -220,21 +217,22 @@ MyApp
           $scope.erreur = false;
 
           $scope.liste_matchs = array[0].filter(function(elt){ return (elt.fini == 0)});
+          
           if (array[1] != undefined){
             $scope.pas_de_match_en_cours = false
             $scope.match_en_cours =  array[1]
-            $scope.cotes_en_cours_formatees = cotes.formatOddsForGame($scope.match_en_cours.equipes)  
+            $scope.cotes_en_cours_formatees = $scope.format_cotes_match($scope.match_en_cours)
           }
           
           if (array[2] != undefined){
             $scope.prochain_match =  array[2]
-            $scope.cotes_prochain_formatees = cotes.formatOddsForGame($scope.prochain_match.equipes)
+            $scope.cotes_prochain_formatees  = $scope.format_cotes_match($scope.prochain_match)
           }
           
         }, function(err){
           $scope.erreur = true;
           $scope.done = true;
-          console.log("Erreur lors du chargement de la liste des matchs...")})}
+          console.log("Erreur lors du chargement de la liste des matchs..." + JSON.stringify(err))})}
 
     affichage_matchs()
 })

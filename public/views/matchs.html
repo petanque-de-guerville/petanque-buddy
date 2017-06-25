@@ -27,14 +27,14 @@
 <div>
 Matchs à venir :
     <ul>
-      <li ng-repeat="match in liste_matchs | orderBy: 'horaire_prevu'">
+      <li ng-repeat="match in liste_matchs">
         <span ng-if="match.ID != match_en_cours.ID">
-	        <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a>({{match.paris[0]}}) 
-	        	<md-button class="md-primary md-raised md-small" ng-click="pari_plus_un(match, 0)">+1</md-button> vs. 
-	        <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a>({{match.paris[1]}}) 
-	        	<md-button class="md-primary md-raised md-small" ng-click="pari_plus_un(match, 1)">+1</md-button> 
-	    	à {{match.horaire_prevu}}. 
-	    	Cotes : {{format_cotes_match(match)}}. 
+		        <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a>({{match.paris[0]}}) 
+		        	<md-button class="md-primary md-raised md-small" ng-click="pari_plus_un(match, 0)">+1</md-button> vs. 
+		        <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a>({{match.paris[1]}}) 
+		        	<md-button class="md-primary md-raised md-small" ng-click="pari_plus_un(match, 1)">+1</md-button> 
+		    	à {{match.horaire_prevu}}. 
+		    	Cotes : {{format_cotes_match(match)}}. 
 	    </span>
       </li>
     </ul> 

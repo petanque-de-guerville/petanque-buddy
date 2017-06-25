@@ -4,6 +4,8 @@ AWS.config.update({
   endpoint: "https://dynamodb.us-west-2.amazonaws.com"
 });
 var docClient = new AWS.DynamoDB.DocumentClient()
+var equipes = require('./equipes.js')
+
 
 exports.findByDate = function(date, cb){
   var table = "Match";
@@ -112,5 +114,25 @@ exports.stopper = function(cb){
           return cb(err, data)
         }
       }
+  })
+}
+
+exports.computeOdds = function(match, cb){
+  console.log("Calcul de la cote du match opposant " + match.equipes[0] + " à " + match.equipes[1])
+  
+  equipes.findByNom(match.equipes[0], function(err0, eq0){
+    equipes.findByNom(match.equipes[1], function(err1, eq1){
+            console.log(match.equipes[0], match.equipes[1], JSON.stringify([eq0, eq1]))
+            var odds1_indiv = eq0[0].cote
+            var odds2_indiv = eq1[0].cote
+            
+            var coeff = 1 / (1 / odds1_indiv + 1 / odds2_indiv);
+
+            var odds1 = 1 / (1 / odds1_indiv * coeff)
+            var odds2 = 1 / (1 / odds2_indiv * coeff)
+            
+            cb([err0, err1], [odds1, odds2])
+
+    })
   })
 }

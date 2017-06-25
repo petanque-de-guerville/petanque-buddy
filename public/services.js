@@ -138,14 +138,14 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
             })
          }
        },
-     findByNom: function(nom, cb){
+     findByNom: function(nom){
        if (deja_requete){
          return $q.when(dict).then(function(d){
-           cb(d.get(nom))
+           return d.get(nom)
          })
        } else {
          return this.liste_equipes().then(function(l){
-           cb(dict.get(nom))
+           return dict.get(nom)
          })
        }}
    }})
@@ -169,14 +169,14 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           })
        }
      },
-   findByPseudo: function(pseudo, cb){
+   findByPseudo: function(pseudo){
      if (deja_requete){
        return $q.when(dict).then(function(d){
-         cb(d.get(pseudo))
+         return d.get(pseudo)
        })
      } else {
        return this.liste_joueurs().then(function(l){
-         cb(dict.get(pseudo))
+         return dict.get(pseudo)
        })
      }}
  }})
@@ -188,16 +188,16 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   var cote = undefined
   var role = undefined
   
-  init = function(user, cb){
-    joueurs.findByPseudo(user, function(res){
+  var init = function(user){
+    return(joueurs.findByPseudo(user).then(function(res){
           pseudo = res.pseudo
           fortune = res.fortune
           equipe = res.equipe
-          cote = cotes.getOddsForPlayer(res.pseudo).cote
+          cote = res.cote
           role = res.role
           $rootScope.$broadcast('user:updated')
-          cb()
-    })    
+          return res
+        }))   
   }
 
   return {
@@ -216,43 +216,69 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     init: init
   }})
 .factory('cotes', function(){
-  getAggregatedOddsForTeam = function(team){
-    // Fonction triviale
-    // En attente de la gestion des cotes
-
-    return {cote_equipe: Math.round(100 * ((Math.random()*3)+1))/100}
-  }
-
-  getOddsForGame = function(teams){
-    // Fonction triviale
-    // En attente de la gestion des cotes
-    var odds1 = getAggregatedOddsForTeam(teams[0]).cote_equipe;
-    var odds2 = getAggregatedOddsForTeam(teams[1]).cote_equipe;
-    var coeff = 1 / (1 / odds1 + 1 / odds2);
-    return {cotes: [ 1 / (coeff * 1 / odds1), 1 / (coeff * 1 / odds2)]}
-  }
+  // var Cotes_joueurs = new Map()
+  // var Cotes_equipes = new Map()
 
 
-  getOddsForPlayer = function(pseudo){
-    // Fonction triviale
-    // En attente de la gestion des cotes
+  // var getOddsForTeam = function(nom_equipe){
+  //   if (Cotes_equipes.has(nom_equipe)){
+  //     return $q.when(Cotes_equipes.get(nom_equipe))
+  //   } else {
+  //     return equipes.findByNom(nom_equipe).then(function(equipe){
+  //           var membres = equipe.joueurs
+  //           return $q.all([getOddsForPlayer(membres[0]),
+  //                   getOddsForPlayer(membres[1]),
+  //                   getOddsForPlayer(membres[2])]).then(function(array_cotes){
+  //                     console.log("Cotes membres", equipe.nom_equipe, ":", JSON.stringify(array_cotes))
+  //                 var coteAgregee = array_cotes[0] + array_cotes[1] + array_cotes[2]
+  //                 console.log("Cote équipe : " + equipe.nom_equipe + " : " + coteAgregee)
+  //                 Cotes_equipes.set(equipe.nom_equipe, coteAgregee)
+  //                 return coteAgregee
+  //             })
+  //           })
+  //   }}
+   
+  // var getOddsForGame = function(match){
+  //   return $q.all([getOddsForTeam(match.equipes[0]), 
+  //                  getOddsForTeam(match.equipes[1])]).then(function(array){
+  //     var odds1_indiv = array[0]
+  //     var odds2_indiv = array[1]
+  //     var coeff = 1 / (1 / odds1_indiv + 1 / odds2_indiv);
+  //     console.log("getOddsForGame 1 : " + odds1_indiv)
+  //     console.log("getOddsForGame 2 : " + odds2_indiv)
 
-    return {cote: Math.round(100 * ((Math.random()*3)+1))/100}
-  }
+  //     var odds1 = 1 / (1 / odds1_indiv * coeff)
+  //     var odds2 = 1 / (1 / odds2_indiv * coeff)
+  //     return {cotes: [odds1, odds2]}
+  //   })
+  // }
 
-  formatOddsForGame = function(teams, sep, nb_dec){
+
+  // var getOddsForPlayer = function(pseudo){
+  //     if (Cotes_joueurs.has(pseudo)){
+  //       return $q.when(Cotes_joueurs.get(pseudo))
+  //     } else {
+  //       return joueurs.findByPseudo(pseudo).then(function(j){
+  //         Cotes_joueurs.set(pseudo, j.cote)
+  //         return j.cote
+  //       })
+  //     }}
+
+  var formatOddsForGame = function(match, sep, nb_dec){
     if (typeof(sep)==='undefined') sep = ",";
     if (typeof(nb_dec)==='undefined') nb_dec = 2;
-    var cotes = getOddsForGame(teams).cotes
-    return ' ' + Math.round(cotes[0] * 10**nb_dec)/10**nb_dec + sep + ' ' + Math.round(cotes[1] * 10**nb_dec)/10**nb_dec
+
+    return ' ' + Math.round(match.cotes[0] * 10**nb_dec)/10**nb_dec + 
+              sep + ' ' + Math.round(match.cotes[1] * 10**nb_dec)/10**nb_dec
   }
 
   return {
-    getOddsForGame: getOddsForGame,
-    getOddsForPlayer: getOddsForPlayer,
+    // getOddsForPlayer: getOddsForPlayer,
+    // getOddsForGame: getOddsForGame,
+    // getOddsForPlayer: getOddsForPlayer,
     formatOddsForGame: formatOddsForGame
   }})
-.factory('matchs', function($q, $resource){
+.factory('matchs', function($q, $resource, cotes){
   var liste = undefined
   var update_needed = true
 
@@ -332,6 +358,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
               })},
     arreter_match_en_cours: arreter_match_en_cours,
     refresh: refresh
+    // calcule_cotes: calcule_cotes
   }})
 .factory('paris', function($q, $http, matchs){
   return {maj: function(){},
