@@ -97,7 +97,7 @@ app.get('/api/matchs/lire/:annee/:horaire_prevu', function(req, res) {
 });
 
 app.get('/api/matchs/demarrer/:id', function(req, res) {
-  return BDD.matchs.stopper((err, data) => {
+  BDD.matchs.stopper((err, data) => {
     if (err){
       return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter."})
     } else {
@@ -114,11 +114,11 @@ app.get('/api/matchs/demarrer/:id', function(req, res) {
 });
 
 app.get('/api/matchs/stopper/', function(req, res) {
-  return BDD.matchs.stopper((err, data) => {
+  BDD.matchs.stopper((err, data) => {
     if (err){
       return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter : " + JSON.stringify(err)})
     } else {
-      return res.status(200).json({status: "Match arrêté avec succès." + data.Attributes.id})
+      return res.status(200).json({status: "Match arrêté avec succès." + JSON.stringify(data)})
     }
   })
 });

@@ -5,6 +5,7 @@ AWS.config.update({
 });
 var docClient = new AWS.DynamoDB.DocumentClient()
 var equipes = require('./equipes.js')
+var paris = require("./paris.js")
 
 
 exports.findByDate = function(date, cb){
@@ -86,14 +87,15 @@ exports.stopper = function(cb){
       console.log("Recherche match en cours terminée.")
       if (err) {
           console.error("Erreur lors de la recherche du match en cours. Error JSON:", JSON.stringify(err, null, 2));
-          return cb(err, data)
+          cb(err, data)
       } else {
         if  (data.Count > 0){
           console.log("Écriture DynamoDB : arrêt match en cours.")
           var params = {
             TableName: "Match",
             Key:{
-              "ID": data.Items[0].ID /* S'il y a plusieurs matchs en cours, on arrête le premier. */
+              /* S'il y a plusieurs matchs en cours, on arrête le premier. Devrait pas il y en avoir plusieurs ! */
+              "ID": data.Items[0].ID 
             },
             UpdateExpression: "set fini = :fini, en_cours = :en_cours",
             ExpressionAttributeValues: {':en_cours': 0,
@@ -101,17 +103,25 @@ exports.stopper = function(cb){
             ReturnValues: 'ALL_NEW'
           }
 
-          return docClient.update(params, function(err, data) {
+          docClient.update(params, function(err, data) {
               if (err) {
                   console.error("Arrêt du match en cours échoué. Erreur JSON:", JSON.stringify(err, null, 2));
+                  cb(err, null)
               } else {
                   console.log("Arrêt du match " + data.Attributes.ID + " réussi.")
+                  /* Paiement des paris */
+                  paris.paiement_joueurs(data.Attributes.ID, function(err, data){
+                    if (err){
+                      cb(err, null)
+                    } else {
+                      cb(null, data)
+                    }
+                  })
               }
-              return cb(err, data)
           })  
         } else {
           console.log("Pas de match à arrêter")
-          return cb(err, data)
+          cb(err, data)
         }
       }
   })

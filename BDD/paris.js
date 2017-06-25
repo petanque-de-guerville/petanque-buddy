@@ -30,3 +30,26 @@ exports.inserePari = function(obj, cb){
       return cb(err, data)
   });
 }
+
+exports.paiement_joueurs = function(ID, cb){
+  var params = {
+    TableName: "Pari",
+    FilterExpression: "ID_match = :ID AND objet_pari = :obj",
+    ExpressionAttributeValues: {
+      ':ID': ID,
+      ':obj': "victoire"}
+  }
+
+  docClient.scan(params, function(err, data) {
+    if (err){
+      cb(err, null)
+    } else {
+      /* Les paris sont dans data.Items */
+      console.log("Paiement des joueurs")
+      data.Items.forEach(function(item){
+        console.log("Paiement du pari", item.ID)
+      })
+      cb(null, data)
+    }
+  })
+}
