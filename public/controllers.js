@@ -239,16 +239,29 @@ MyApp
     affichage_matchs()
 })
 .controller('parierCtrl', function(){})
-.controller('AdminCtrl', function(matchs, $q, $scope){
+.controller('AdminCtrl', function(matchs, $q, $scope, $mdToast){
+    var stop_count = 0
     $scope.demarrer_match = function(){
       matchs.demarrer_prochain_match().then(function(){ controle_des_matchs()})
     }
 
     $scope.arreter_match_en_cours = function(){
-      matchs.arreter_match_en_cours().then(function(){ controle_des_matchs()})
+      stop_count++
+      if (stop_count != 2){
+        $mdToast.show(
+          $mdToast.simple()
+            .textContent("Appuyer une deuxième fois pour stopper le match.")
+            .position("bottom")
+            .hideDelay(1000))
+      } else {
+        matchs.arreter_match_en_cours().then(function(){ 
+          controle_des_matchs()})  
+      }
+      
     }
 
     var controle_des_matchs = function(){
+      stop_count = 0
       $scope.done = false;
       $scope.erreur = false;
       $scope.pas_de_match_en_cours = true

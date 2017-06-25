@@ -5,17 +5,6 @@ Menu
 -----
 * ajouter des icônes devant chacun des items
 
-
-
-
-
-Cotes
-----
-* cote d'une équipe ?
-* cote d'un joueur ?
-* cotes d'équipes dans un match ?
-
-
 Paris
 ----
 * afficher les gains potentiels (avec les paris en cours)
