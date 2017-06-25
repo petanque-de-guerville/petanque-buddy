@@ -177,7 +177,7 @@ MyApp
     var channel = pusher.subscribe('MAJ')
     channel.bind('MAJ_matchs', function(data) {
       console.log("Reçu notif mise à jour back end")
-      matchs.refresh().then(affichage_matchs);
+      matchs.refresh().then(affichage_matchs)
     });
 
 
@@ -185,13 +185,15 @@ MyApp
     $scope.erreur = false;
     $scope.pas_de_match_en_cours = true
     $scope.fortune = profile.getFortune();
+    $scope.clicked = []
 
-    $scope.pari_plus_un = function(match, num_equipe){
+    $scope.pari_plus_un = function(match, num_equipe, index){
       if (profile.getFortune() > 0){
         paris.ajouter_pari(match, num_equipe, profile.pseudo())
              .then(function(){        
                 profile.addToFortune(-1) // Pas besoin de faire une mise à jour pushée car seul cet utilisateur est impacté
                 $scope.fortune = profile.getFortune()
+                $scope.clicked[index] = false
               })
       } else {
         $mdDialog.show(
@@ -216,7 +218,7 @@ MyApp
           $scope.done = true;
           $scope.erreur = false;
 
-          $scope.liste_matchs = array[0].filter(function(elt){ return (elt.fini == 0)});
+          $scope.liste_matchs = array[0].filter(function(elt){ return (elt.fini == 0 && elt.en_cours == 0)});
           
           if (array[1] != undefined){
             $scope.pas_de_match_en_cours = false
@@ -228,7 +230,7 @@ MyApp
             $scope.prochain_match =  array[2]
             $scope.cotes_prochain_formatees  = $scope.format_cotes_match($scope.prochain_match)
           }
-          
+          return
         }, function(err){
           $scope.erreur = true;
           $scope.done = true;
