@@ -284,6 +284,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
 
   var liste_matchs = function(){
       if (update_needed){
+        console.log("Recalcul de liste_matchs")
         var deferred = $q.defer()
 
         $resource("/api/matchs/lire/2017/all")

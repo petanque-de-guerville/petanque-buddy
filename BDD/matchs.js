@@ -29,16 +29,15 @@ exports.findByDate = function(date, cb){
 
 exports.modifieMises = function(obj, cb){
   
-
-  obj.match.paris[obj.num_equipe] = obj.match.paris[obj.num_equipe] + obj.mise
+  var updateExp = (obj.num_equipe == 0) ? "set paris[0] = paris[0] + :mise" : "set paris[1] = paris[1] + :mise"
   console.log("Écriture DynamoDB pour match " + obj.match.equipes[0] + " vs. " + obj.match.equipes[1] + "(" + obj.match.annee+ ")")
   var params = {
     TableName: "Match",
     Key:{
       "ID": obj.match.ID
     },
-    UpdateExpression: "set paris = :paris",
-    ExpressionAttributeValues: {':paris': obj.match.paris}
+    UpdateExpression: updateExp,
+    ExpressionAttributeValues: {':mise': obj.mise}
   }
 
   docClient.update(params, function(err, data) {
@@ -47,7 +46,7 @@ exports.modifieMises = function(obj, cb){
       } else {
           console.log("Mise à jour des paris du match " + obj.match.equipes[0] + " vs. " + obj.match.equipes[1] + 
             " par " + obj.pseudo)
-          return cb(err, data)
+          cb(err, data)
       }
   });}
 
