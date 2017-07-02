@@ -180,7 +180,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
        })
      }}
  }})
-.factory('profile', function(joueurs, cotes, $rootScope){
+.factory('profile', function(joueurs, cotes, $rootScope, $q){
   
   var pseudo = undefined
   var fortune = undefined
@@ -200,6 +200,16 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
         }))   
   }
 
+ var sync = function(){
+    return $q.all([joueurs.findByPseudo(pseudo)]).then(function(array){
+          fortune = array[0].fortune
+          equipe = array[0].equipe
+          cote = array[0].cote
+          role = array[0].role
+          $rootScope.$broadcast('user:updated')
+          return array[0]              
+  })}
+
   return {
     pseudo: function(){ return pseudo},
     addToFortune: function(inc){ fortune = fortune + inc},
@@ -213,7 +223,8 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           return role.includes(role_test)
       } 
       else return false},
-    init: init
+    init: init,
+    sync: sync
   }})
 .factory('cotes', function(){
   // var Cotes_joueurs = new Map()
@@ -278,7 +289,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     // getOddsForPlayer: getOddsForPlayer,
     formatOddsForGame: formatOddsForGame
   }})
-.factory('matchs', function($q, $resource, cotes){
+.factory('matchs', function($q, $resource, cotes, $rootScope){
   var liste = undefined
   var update_needed = true
 
@@ -331,10 +342,11 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
               update_needed = true
               return res
             })}
-  var refresh = function(){
+  var sync = function(){
     update_needed = true
     return $q.all([liste_matchs()]).then(function(array){
               update_needed = false
+              $rootScope.$broadcast('matchs:updated')
             })}
 
   return {
@@ -358,7 +370,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                 return demarrer_match(match.ID)
               })},
     arreter_match_en_cours: arreter_match_en_cours,
-    refresh: refresh
+    sync: sync
     // calcule_cotes: calcule_cotes
   }})
 .factory('paris', function($q, $http, matchs){

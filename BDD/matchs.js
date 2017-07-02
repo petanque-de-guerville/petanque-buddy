@@ -145,3 +145,19 @@ exports.computeOdds = function(match, cb){
     })
   })
 }
+
+exports.findByID = function(id, cb){
+  var params = {
+      TableName: "Match",
+      Key:{
+        'ID': id
+      }
+  };
+  console.log("Requête DynamoDB pour match " + id)
+
+  docClient.get(params, function(err, data) {
+      if (err) {
+          console.error("Impossible de lire les données du match " + id + ". Erreur JSON:", JSON.stringify(err, null, 2));
+      }
+      return cb(err, data.Item)
+  });}

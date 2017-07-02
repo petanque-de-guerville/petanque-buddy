@@ -17,9 +17,7 @@ var pusher = new Pusher({
   encrypted: true
 })
 var pushNotifDelay = 1000 * 10
-var Notifications = {}
-Notifications.matchs = 0
-
+var Notifications = new Set()
 
 
 app.use(bodyParser.json());
@@ -103,6 +101,7 @@ app.get('/api/matchs/demarrer/:id', function(req, res) {
     } else {
       BDD.matchs.demarrer({id: req.params.id}, (err, data) => {
         if (data){
+          Notifications.add('matchs_debut')
           return res.status(200).json(data)
         } else {
           return res.status(500).json({status: "Erreur lors du démarrage du match " + req.params.id})
@@ -118,6 +117,7 @@ app.get('/api/matchs/stopper/', function(req, res) {
     if (err){
       return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter : " + JSON.stringify(err)})
     } else {
+      Notifications.add('match_arrêté')
       return res.status(200).json({status: "Match arrêté avec succès." + JSON.stringify(data)})
     }
   })
@@ -143,7 +143,7 @@ app.post('/api/paris/issue_match', function(req, res, next) {
                           pseudo: req.body.pseudo},
           (err, data) => {
             if (data){
-              Notifications.matchs = 1
+              Notifications.add('matchs_nouveaux_paris')
               return res.status(200).json({status: "Pari inséré et fortune joueur mise à jour"})
             } else {
               return res.status(500).json({status: "Erreur lors de l'insertion du pari."})
@@ -231,19 +231,27 @@ app.get('/profile',
   });
 
 
-app.listen(3000, "192.168.0.21", function () {
+app.listen(3000, "192.168.0.16", function () {
   console.log('Petanque-buddy écoute sur le port 3000...')
 })
 
 
 
-
-
 // NOTIFICATIONS
 setInterval(function(){
-  if (Notifications.matchs == 1){
-    Notifications.matchs = 0
-    pusher.trigger('MAJ', 'MAJ_matchs', {})
-    console.log("Push envoyé.")
+  console.log(Notifications.size + " nouvelles notifications")
+
+  if (Notifications.has('match_arrêté')){
+    Notifications.delete('match_arrêté')
+    pusher.trigger('MAJ', 'match_terminé', {})
+    console.log("Push matchs envoyé.")
+  } else if (Notifications.has('matchs_nouveaux_paris')){
+    Notifications.delete('matchs_nouveaux_paris')
+    pusher.trigger('MAJ', 'matchs_nouveaux_paris', {})
+    console.log("Push nouveaux paris envoyé.")
+  } else if (Notifications.has('matchs_debut')){
+    Notifications.delete('matchs_debut')
+    pusher.trigger('MAJ', 'matchs_debut', {})
+    console.log("Push début match.")    
   }
 }, pushNotifDelay)

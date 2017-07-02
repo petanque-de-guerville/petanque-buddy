@@ -8,7 +8,6 @@ Menu
 Paris
 ----
 * afficher les gains potentiels (avec les paris en cours)
-* à la fin d'un match, payer les paris gagnants
 
 Divers
 -----
@@ -26,5 +25,6 @@ Page Ma fiche
 ---------
 * Ajouter le temps estimé avant le prochain match à jouer par le joueur logué
 
-BDD
+Admin
 -----
+* donner un score au fur et à mesure du match

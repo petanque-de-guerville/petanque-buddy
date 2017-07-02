@@ -12,7 +12,32 @@ MyApp
         }
       })
     }})
-.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile) {
+.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile, $rootScope, matchs) {
+
+
+    // Gestion des notifications envoyées par backend
+    var pusher = new Pusher('b238d890f5ce582a1916', {
+      cluster: 'eu',
+      encrypted: true
+    })
+    var channel = pusher.subscribe('MAJ')
+    channel.bind('match_terminé', function(data) {
+      console.log("Reçu notif mise à jour back end : fin de match")
+      matchs.sync().then(function(){
+        profile.sync()
+      })
+    })
+
+    channel.bind('matchs_nouveaux_paris', function(data){
+      console.log("Reçu notif mise à jour back end : nouveaux paris")
+      matchs.sync()
+    });
+
+    channel.bind('matchs_debut', function(data){
+      console.log("Reçu notif back end : début nouveau match")
+      matchs.sync()
+    })
+
 
     $scope.$on('user:updated', function(event,data) {
       $scope.estAdmin = profile.est("admin")
@@ -170,15 +195,14 @@ MyApp
     }})
 .controller('MatchsCtrl', function($scope, matchs, $q, cotes, profile, $mdDialog, paris){
     
-    var pusher = new Pusher('b238d890f5ce582a1916', {
-      cluster: 'eu',
-      encrypted: true
+
+    $scope.$on('matchs:updated', function(event,data) {
+      affichage_matchs()
     })
-    var channel = pusher.subscribe('MAJ')
-    channel.bind('MAJ_matchs', function(data) {
-      console.log("Reçu notif mise à jour back end")
-      matchs.refresh().then(affichage_matchs)
-    });
+
+    $scope.$on('user:updated', function(event,data) {
+      $scope.fortune = profile.getFortune();  
+    })
 
 
     $scope.done = false;
@@ -239,7 +263,7 @@ MyApp
     affichage_matchs()
 })
 .controller('parierCtrl', function(){})
-.controller('AdminCtrl', function(matchs, $q, $scope, $mdToast){
+.controller('AdminCtrl', function(matchs, $q, $scope, $mdToast, profile){
     var stop_count = 0
     $scope.demarrer_match = function(){
       matchs.demarrer_prochain_match().then(function(){ controle_des_matchs()})

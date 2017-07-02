@@ -28,24 +28,23 @@ exports.findByPseudo = function(pseudo, cb){
 }
 
 exports.addFortune = function(obj, cb){
+    console.log("Écriture DynamoDB. Mise à jour fortune de " + obj.pseudo + " : " + obj.nb_boyards + " boyards.")
+    var params = {
+      TableName: "Joueur",
+      Key:{
+        "pseudo": obj.pseudo
+      },
+      UpdateExpression: "set fortune = fortune + :nb",
+      ExpressionAttributeValues: {':nb': obj.nb_boyards}
+    }
 
-  console.log("Écriture DynamoDB. Mise à jour fortune de " + obj.pseudo + " : " + obj.nb_boyards + " boyards.")
-  var params = {
-    TableName: "Joueur",
-    Key:{
-      "pseudo": obj.pseudo
-    },
-    UpdateExpression: "set fortune = fortune + :nb",
-    ExpressionAttributeValues: {':nb': obj.nb_boyards}
-  }
-
-  docClient.update(params, function(err, data) {
-      if (err) {
-          console.error("Mise à jour du joueur échouée. Erreur JSON:", JSON.stringify(err, null, 2));
-          cb(err, null)
-      } else {
-          console.log("Mise à jour de la fortune du joueur " + obj.pseudo)
-          return cb(null, data)
-      }
-  });
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.error("Mise à jour du joueur échouée. Erreur JSON:", JSON.stringify(err, null, 2));
+            cb(err, null)
+        } else {
+            console.log("Mise à jour de la fortune du joueur " + obj.pseudo)
+            cb(null, data)
+        }
+    })
 }
