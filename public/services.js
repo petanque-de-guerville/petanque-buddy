@@ -158,6 +158,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
        if (deja_requete) {
          return $q.when(liste)
        } else {
+          console.log("Chargement des joueurs depuis la BDD")
          return $resource("/api/joueurs/all")
           .query()
           .$promise
@@ -169,8 +170,11 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           })
        }
      },
-   findByPseudo: function(pseudo){
-     if (deja_requete){
+   findByPseudo: function(pseudo, force_reload){
+    if (force_reload) {
+      deja_requete = false
+    }
+    if (deja_requete){
        return $q.when(dict).then(function(d){
          return d.get(pseudo)
        })
@@ -201,7 +205,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   }
 
  var sync = function(){
-    return $q.all([joueurs.findByPseudo(pseudo)]).then(function(array){
+    return $q.all([joueurs.findByPseudo(pseudo, true)]).then(function(array){
           fortune = array[0].fortune
           equipe = array[0].equipe
           cote = array[0].cote
@@ -342,20 +346,42 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
               update_needed = true
               return res
             })}
-  var sync = function(){
-    update_needed = true
-    return $q.all([liste_matchs()]).then(function(array){
-              update_needed = false
-              $rootScope.$broadcast('matchs:updated')
-            })}
-
-  return {
-    liste_matchs: liste_matchs,
-    en_cours: function(){
+  var sync = function(data){
+    if (data && data.score_a_jour){
+      console.log("Mise à jour score match en cours")
+      en_cours().then(function(match_en_cours){
+        match_en_cours.score = data.score_a_jour
+      })
+    } else {
+      update_needed = true
+      return $q.all([liste_matchs()]).then(function(array){
+                update_needed = false
+                $rootScope.$broadcast('matchs:updated')
+              })
+    }
+  }
+  
+  var en_cours = function(){
       return liste_matchs()
               .then(function(res){ return res.find( function(match){
                 return (match.en_cours == "1")
-              })})},
+  })})}
+
+  var modifie_score_match_en_cours = function(scores){
+    return $resource("/api/matchs/scores/" + scores[0] + "/" + scores[1])
+          .get()
+          .$promise
+          .then(function(res){
+            console.log("Score mis à jour")
+            return res
+          })
+  }
+
+
+
+  return {
+    liste_matchs: liste_matchs,
+    en_cours: en_cours,
     prochain: prochain,
     prochain_match_de: function(equipe){
       return liste_matchs()
@@ -370,7 +396,8 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                 return demarrer_match(match.ID)
               })},
     arreter_match_en_cours: arreter_match_en_cours,
-    sync: sync
+    sync: sync,
+    modifie_score_match_en_cours: modifie_score_match_en_cours,
     // calcule_cotes: calcule_cotes
   }})
 .factory('paris', function($q, $http, matchs){

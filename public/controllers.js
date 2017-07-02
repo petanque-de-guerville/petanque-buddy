@@ -24,6 +24,7 @@ MyApp
     channel.bind('match_terminé', function(data) {
       console.log("Reçu notif mise à jour back end : fin de match")
       matchs.sync().then(function(){
+        console.log("Mise à jour profile")
         profile.sync()
       })
     })
@@ -36,6 +37,11 @@ MyApp
     channel.bind('matchs_debut', function(data){
       console.log("Reçu notif back end : début nouveau match")
       matchs.sync()
+    })
+
+    channel.bind('score_mis_a_jour', function(data){
+      console.log("Reçu notif back end : score mis à jour")
+      matchs.sync(data)
     })
 
 
@@ -201,8 +207,13 @@ MyApp
     })
 
     $scope.$on('user:updated', function(event,data) {
-      $scope.fortune = profile.getFortune();  
+      $scope.fortune = profile.getFortune();
+      console.log("Fortune : " + $scope.fortune)  
     })
+
+    // $scope.$on('matchs:score_a_jour', function(event, data){
+    //   $scope.match_en_cours = matchs.en_cours()
+    // })
 
 
     $scope.done = false;
@@ -248,6 +259,8 @@ MyApp
             $scope.pas_de_match_en_cours = false
             $scope.match_en_cours =  array[1]
             $scope.cotes_en_cours_formatees = $scope.format_cotes_match($scope.match_en_cours)
+          } else {
+            $scope.pas_de_match_en_cours = true            
           }
           
           if (array[2] != undefined){
@@ -263,8 +276,9 @@ MyApp
     affichage_matchs()
 })
 .controller('parierCtrl', function(){})
-.controller('AdminCtrl', function(matchs, $q, $scope, $mdToast, profile){
+.controller('AdminCtrl', function(matchs, $q, $scope, $mdToast, profile, matchs){
     var stop_count = 0
+    
     $scope.demarrer_match = function(){
       matchs.demarrer_prochain_match().then(function(){ controle_des_matchs()})
     }
@@ -280,8 +294,7 @@ MyApp
       } else {
         matchs.arreter_match_en_cours().then(function(){ 
           controle_des_matchs()})  
-      }
-      
+      } 
     }
 
     var controle_des_matchs = function(){
@@ -299,6 +312,8 @@ MyApp
         if (array[0] != undefined){
           $scope.pas_de_match_en_cours = false
           $scope.match_en_cours =  array[0]
+          $scope.score = [{'score': $scope.match_en_cours.score[0]},
+                          {'score': $scope.match_en_cours.score[1]}] // Structure alambiquée pour que la view se mette à jour quand on ajoute 1
         }
         
         if (array[1] != undefined){
@@ -308,6 +323,11 @@ MyApp
         $scope.erreur = true;
         $scope.done = true;
         console.log("Erreur lors du chargement des matchs...")})}
+
+    $scope.score_plus_un = function(num_equipe){
+      $scope.score[num_equipe].score = parseInt($scope.score[num_equipe].score) + 1
+      matchs.modifie_score_match_en_cours([$scope.score[0].score, $scope.score[1].score])
+    }
 
     controle_des_matchs()
 })

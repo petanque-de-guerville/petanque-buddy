@@ -50,6 +50,51 @@ exports.modifieMises = function(obj, cb){
       }
   });}
 
+exports.modifieScores = function(obj, cb){
+  console.log("Recherche match en cours...")
+    var params = {
+        TableName: "Match",
+        FilterExpression: "en_cours = :en_cours",
+        ExpressionAttributeValues: {':en_cours': 1}
+    }
+    
+    docClient.scan(params, function(err, data) {
+        console.log("Recherche match en cours terminée.")
+        if (err) {
+            console.error("Erreur lors de la recherche du match en cours. Error JSON:", JSON.stringify(err, null, 2));
+            cb(err, data)
+        } else {
+          if  (data.Count > 0){
+            console.log("Écriture DynamoDB : Mise à jour score du match " + JSON.stringify(data.Items[0]))
+            var updateExp = "set score[0] = :score0, score[1] = :score1"
+            var params = {
+              TableName: "Match",
+              Key:{
+                /* S'il y a plusieurs matchs en cours, on arrête le premier. Devrait pas il y en avoir plusieurs ! */
+                "ID": data.Items[0].ID 
+              },
+            UpdateExpression: updateExp,
+            ExpressionAttributeValues: {':score0': parseInt(obj.score0),
+                                        ':score1': parseInt(obj.score1)},
+            ConditionExpression: "score[0] <= :score0 AND score[1] <= :score1",
+            ReturnValues: 'ALL_NEW'
+          }
+
+          docClient.update(params, function(err, data) {
+              if (err) {
+                  console.error("Mise à jour du score échouée. Erreur JSON:", JSON.stringify(err, null, 2));
+                  cb(err, null)
+              } else {
+                  console.log("Mise à jour du score réussie : " + obj.score0 + " " + obj.score1)
+                  cb(null, [obj.score0, obj.score1])
+                }
+              }
+              )}
+          else {
+            cb({error: "Pas de match en cours."}, null)
+          }}})
+  }
+
 exports.demarrer = function(obj, cb){
 
   console.log("Écriture DynamoDB : démarrage match " + obj.id)

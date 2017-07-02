@@ -13,6 +13,9 @@
 			<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> 
 			(cotes : {{cotes_en_cours_formatees}}).
 		</span>
+		<span ng-if="!pas_de_match_en_cours">
+			Score : {{match_en_cours.score[0]}} - {{match_en_cours.score[1]}}
+		</span>
 
 	<div>
 		<span ng-if="prochain_match != null">

@@ -7,6 +7,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var path = require('path');
 var BDD = require('./BDD')
 
+var score_match_en_cours
+
 // NOTIFICATIONS
 var Pusher = require('pusher');
 var pusher = new Pusher({
@@ -123,7 +125,19 @@ app.get('/api/matchs/stopper/', function(req, res) {
   })
 });
 
-
+app.get('/api/matchs/scores/:score0/:score1', function(req, res, next){
+  console.log(JSON.stringify(req.params))
+  BDD.matchs.modifieScores({score0: req.params.score0,
+                            score1: req.params.score1}, function(err, data){
+                              if (err){
+                                return res.status(500).json({status: "Erreur lors de la mise à jour du score : " + JSON.stringify(err)})                    
+                              } else {
+                                Notifications.add('score_mis_a_jour')
+                                score_match_en_cours = data
+                                return res.status(200).json({status: "Mise à jour du score avec succès." + JSON.stringify(data)})                           
+                              }
+                            })
+})
 
 app.post('/api/paris/issue_match', function(req, res, next) {
   BDD.matchs.modifieMises({match: req.body.match,
@@ -244,7 +258,7 @@ setInterval(function(){
   if (Notifications.has('match_arrêté')){
     Notifications.delete('match_arrêté')
     pusher.trigger('MAJ', 'match_terminé', {})
-    console.log("Push matchs envoyé.")
+    console.log("Push match terminé envoyé.")
   } else if (Notifications.has('matchs_nouveaux_paris')){
     Notifications.delete('matchs_nouveaux_paris')
     pusher.trigger('MAJ', 'matchs_nouveaux_paris', {})
@@ -253,5 +267,9 @@ setInterval(function(){
     Notifications.delete('matchs_debut')
     pusher.trigger('MAJ', 'matchs_debut', {})
     console.log("Push début match.")    
+  } else if (Notifications.has('score_mis_a_jour')){
+    Notifications.delete('score_mis_a_jour')
+    pusher.trigger('MAJ', 'score_mis_a_jour', {score_a_jour: score_match_en_cours})
+    console.log("Push score mis à jour.")    
   }
 }, pushNotifDelay)

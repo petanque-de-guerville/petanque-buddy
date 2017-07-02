@@ -27,4 +27,4 @@ Page Ma fiche
 
 Admin
 -----
-* donner un score au fur et à mesure du match
+

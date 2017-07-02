@@ -3,6 +3,14 @@
 <span ng-if="!done">Chargement...</span>
 <span ng-if="erreur">Erreur !</span>
 <span ng-if="done && !erreur">
+
+
+<!-- Contrôles pour match en cours -->
+<div ng-if="!pas_de_match_en_cours"> 
+	{{match_en_cours.equipes[0]}} <md-button class="md-primary md-raised md-small" ng-click="score_plus_un(0)">+1</md-button> {{score[0].score}} - {{score[1].score}} <md-button class="md-primary md-raised md-small" ng-click="score_plus_un(1)">+1</md-button> {{match_en_cours.equipes[1]}}
+</div>
+
+<!-- Navigation entre les matchs -->
 <div>
 	<div>
 		<span ng-if="pas_de_match_en_cours">Il n'y a pas de match en cours.</span>
@@ -10,17 +18,19 @@
 			<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> à 
 			<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> 
 			<md-button class="md-primary md-raised md-small" ng-click="arreter_match_en_cours()">
-				<md-icon>stop<md-icon>
+				<md-icon>stop</md-icon>
 			</md-button>
 		</span>
-
+	</div>
+	
 	<div>
 		Le prochain match opposera 
 		<a ng-href="#/equipes/{{prochain_match.equipes[0]}}">{{prochain_match.equipes[0]}}</a> à 
 		<a ng-href="#/equipes/{{prochain_match.equipes[1]}}">{{prochain_match.equipes[1]}}</a> 
 		<md-button class="md-primary md-raised md-small" ng-click="demarrer_match()">
-			<md-icon>play_arrow<md-icon>
+			<md-icon>play_arrow</md-icon>
 		</md-button>
 
 	</div>
 </div>
+
