@@ -180,15 +180,20 @@ MyApp
     matchs.matchs_de($scope.nom_equipe).then(function(matchs_de){
       $scope.liste_matchs = matchs_de
     })})
-.controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, cotes){
+.controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, matchs){
     $scope.pseudo = $routeParams.pseudo;
     $scope.done = false;
     $scope.erreur = false;
 
     joueurs.findByPseudo($routeParams.pseudo).then(function(j){
       $scope.joueur = j
-      $scope.done = true;
-    }) })
+      matchs.prochain_match_de(j.equipe).then(match => {
+        $scope.duree_avant_match = matchs.temps_jusqu_a_match(match)
+        $scope.done = true;
+      })
+    })
+
+  })
 .controller('MaFicheCtrl', function($scope, profile, matchs){
     $scope.profile = profile
     $scope.changerMDP = false

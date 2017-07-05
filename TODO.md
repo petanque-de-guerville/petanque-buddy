@@ -19,7 +19,7 @@ Page d'accueil
 
 Page Fiche Joueur
 --------
-* Ajouter le temps estimé avant le prochain match à jouer par le joueur
+
 
 Page Ma fiche
 ---------
