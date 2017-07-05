@@ -227,8 +227,12 @@ MyApp
         paris.ajouter_pari(match, num_equipe, profile.pseudo())
              .then(function(){        
                 profile.addToFortune(-1) // Pas besoin de faire une mise à jour pushée car seul cet utilisateur est impacté
+                                        // et la fonction ajouter_pari se charge de retirer 1 à la fortune en BDD
                 $scope.fortune = profile.getFortune()
                 $scope.clicked[index] = false
+                match.paris[num_equipe] = match.paris[num_equipe] + 1 // On fait ces écritures pour le joueur en attendant que 
+                                                                      // la màj du serveur soit notifiée (y compris pour prendre
+                                                                      // en compte les paris des autres joueurs)
               })
       } else {
         $mdDialog.show(
