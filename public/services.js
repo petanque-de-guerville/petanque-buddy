@@ -358,15 +358,11 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                 update_needed = false
                 $rootScope.$broadcast('matchs:updated')
               })
-    }
-  }
-  
+    }}
   var en_cours = function(){
       return liste_matchs()
               .then(function(res){ return res.find( function(match){
-                return (match.en_cours == "1")
-  })})}
-
+                return (match.en_cours == "1")})})}
   var modifie_score_match_en_cours = function(scores){
     return $resource("/api/matchs/scores/" + scores[0] + "/" + scores[1])
           .get()
@@ -374,15 +370,23 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           .then(function(res){
             console.log("Score mis à jour")
             return res
-          })
+          })}
+  var temps_jusqu_a_match = function(prochain_match){
+    var part = prochain_match.horaire_prevu.match(/(\d+):(\d+)/i)
+    var hh = parseInt(part[1], 10)
+    var mm = parseInt(part[2], 10)
+
+    var date_now = new Date()
+    var date_match = new Date(date_now.getFullYear(), date_now.getMonth(), date_now.getDate(), hh, mm, 0)
+    var diff_minutes = Math.round((date_match - date_now) / 1000 / 60)
+    return diff_minutes
   }
 
-
-
   return {
-    liste_matchs: liste_matchs,
-    en_cours: en_cours,
-    prochain: prochain,
+    liste_matchs,
+    temps_jusqu_a_match,
+    en_cours,
+    prochain,
     prochain_match_de: function(equipe){
       return liste_matchs()
               .then(function(res){ return res.find(function(match){
@@ -395,10 +399,9 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
       return  prochain().then(function(match) {
                 return demarrer_match(match.ID)
               })},
-    arreter_match_en_cours: arreter_match_en_cours,
-    sync: sync,
-    modifie_score_match_en_cours: modifie_score_match_en_cours,
-    // calcule_cotes: calcule_cotes
+    arreter_match_en_cours,
+    sync,
+    modifie_score_match_en_cours
   }})
 .factory('paris', function($q, $http, matchs){
   return {maj: function(){},

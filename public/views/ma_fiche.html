@@ -6,8 +6,12 @@ Fortune : {{profile.getFortune()}} boyards </br>
 Cote: {{profile.cote()}} </br>
 
 
- <md-button class="md-raised md-primary" ng-show="!changerMDP" ng-click="changerMDP = true;">Modifier mot de passe</md-button>
+	<div>
+		Prochain match contre <a ng-href="#/equipes/{{prochain_match.equipes[num_equipe]}}">{{prochain_match.equipes[num_equipe]}}</a> dans <span>{{duree_avant_match}} min </span><span>({{prochain_match.horaire_prevu}})</span>
+	</div>
 
+
+<md-button class="md-raised md-primary" ng-show="!changerMDP" ng-click="changerMDP = true;">Modifier mot de passe</md-button>
 <form ng-submit="changeMDP()" role="form" ng-show="changerMDP">
             <label>Nouveau mot de passe</label>
             <input type="password" ng-model="loginForm.password_1" ng-keypress="MDP_differents=false;" required />

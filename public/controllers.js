@@ -188,7 +188,7 @@ MyApp
       $scope.joueur = j
       $scope.done = true;
     }) })
-.controller('MaFicheCtrl', function($scope, profile){
+.controller('MaFicheCtrl', function($scope, profile, matchs){
     $scope.profile = profile
     $scope.changerMDP = false
     $scope.MDP_differents = false
@@ -198,7 +198,15 @@ MyApp
       } else {
         console.log("Changer le mot de passe en BDD")
       }
-    }})
+    }
+
+    matchs.prochain_match_de(profile.equipe()).then(match => {
+      $scope.prochain_match = match
+      $scope.num_equipe = (match.equipes[0] == profile.equipe()) ? 0 : 1
+      $scope.duree_avant_match = matchs.temps_jusqu_a_match(match)
+    })
+
+  })
 .controller('MatchsCtrl', function($scope, matchs, $q, cotes, profile, $mdDialog, paris){
     
 
