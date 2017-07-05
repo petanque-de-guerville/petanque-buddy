@@ -15,7 +15,7 @@ Divers
 
 Page d'accueil
 -------
-* Ajouter le temps estimé avant le prochain match à jouer par le joueur logué
+
 
 Page Fiche Joueur
 --------
@@ -23,7 +23,7 @@ Page Fiche Joueur
 
 Page Ma fiche
 ---------
-* Ajouter le temps estimé avant le prochain match à jouer par le joueur logué
+
 
 Admin
 -----

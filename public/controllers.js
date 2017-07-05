@@ -6,6 +6,7 @@ MyApp
     if ($scope.nom_joueur != undefined) {
       matchs.prochain_match_de(profile.equipe()).then(function(match){
         if (match != null){
+          $scope.duree_avant_match = matchs.temps_jusqu_a_match(match)
           $scope.prochain_match = { "horaire": match.horaire_prevu}
         } else {
           $scope.prochain_match = null
