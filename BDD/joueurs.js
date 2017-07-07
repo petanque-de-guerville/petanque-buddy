@@ -4,6 +4,9 @@ AWS.config.update({
   endpoint: "https://dynamodb.us-west-2.amazonaws.com"
 });
 var docClient = new AWS.DynamoDB.DocumentClient()
+var equipes = require('./equipes.js')
+
+
 
 exports.findByPseudo = function(pseudo, cb){
   var table = "Joueur";
@@ -48,3 +51,6 @@ exports.addFortune = function(obj, cb){
         }
     })
 }
+
+
+

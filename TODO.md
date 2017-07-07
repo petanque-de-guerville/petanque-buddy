@@ -9,6 +9,10 @@ Paris
 ----
 * afficher les gains potentiels (avec les paris en cours)
 
+Cotes
+-----
+* modifier les cotes des joueurs au fur et à mesure de l'avancement des matchs
+
 Divers
 -----
 * Ajouter une favicon.ico

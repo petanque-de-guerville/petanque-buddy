@@ -67,7 +67,7 @@ exports.paiement_joueurs = function(ID, cb){
           }
 
         })
-        cb(null, Paris)
+        cb(null, ID)
       }
     })
 

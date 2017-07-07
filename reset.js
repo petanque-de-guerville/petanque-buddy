@@ -10,7 +10,7 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 var equipes = require('./BDD/equipes.js')
 var matchs = require('./BDD/matchs.js')
-
+var cotes = require('./BDD/cotes.js')
 
 console.log("Ajout de données à la BDD. Patientez...");
 console.log("---- Mise à jour des joueurs ----");
@@ -53,7 +53,7 @@ var MAJ_equipes = function(){
   var nbEquipesATraiter = allTeams.length
   allTeams.forEach(function(equipe) {
       
-      equipes.computeOdds(equipe.nom_equipe, function(err, coteEquipe){
+      cotes.computeOddsTeam(equipe.nom_equipe, function(err, coteEquipe){
         console.log("Cote pour l'équipe", equipe.nom_equipe, ":", coteEquipe)
         var params = {
             TableName: "Equipe",
@@ -98,7 +98,7 @@ var MAJ_matchs = function(){
     } else {
       data.Items.forEach(function(match){
 
-        matchs.computeOdds(match, function(err, cotes_ce_match){
+        cotes.computeOddsMatch(match, function(err, cotes_ce_match){
 
 
           var params = {

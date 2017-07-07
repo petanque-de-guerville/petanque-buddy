@@ -6,7 +6,24 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient()
 var equipes = require('./equipes.js')
 var paris = require("./paris.js")
+var joueurs = require("./joueurs.js")
+var cotes = require("./cotes.js")
 
+var findByID = function(id, cb){
+  var params = {
+      TableName: "Match",
+      Key:{
+        'ID': id
+      }
+  };
+  console.log("Requête DynamoDB pour match " + id)
+
+  docClient.get(params, function(err, data) {
+      if (err) {
+          console.error("Impossible de lire les données du match " + id + ". Erreur JSON:", JSON.stringify(err, null, 2));
+      }
+      return cb(err, data.Item)
+  });}
 
 exports.findByDate = function(date, cb){
   var table = "Match";
@@ -115,8 +132,7 @@ exports.demarrer = function(obj, cb){
           console.log("Démarrage du match " + obj.id + " réussi.")
           return cb(err, data.Attributes)
       }
-  })  
-}
+  })  }
 
 exports.stopper = function(cb){
   
@@ -154,11 +170,18 @@ exports.stopper = function(cb){
               } else {
                   console.log("Arrêt du match " + data.Attributes.ID + " réussi.")
                   /* Paiement des paris */
-                  paris.paiement_joueurs(data.Attributes.ID, function(err, data){
+                  paris.paiement_joueurs(data.Attributes.ID, function(err, ID_match){
                     if (err){
                       cb(err, null)
                     } else {
-                      cb(null, data)
+                      /* Modification des cotes des joueurs */
+                      cotes.modification_cotes_equipes_suite_match(ID_match, (err, data) => {
+                        if (err){
+                          cb(err, null)
+                        } else {
+                          cb(null, data)
+                        }
+                      })
                     }
                   })
               }
@@ -168,41 +191,6 @@ exports.stopper = function(cb){
           cb(err, data)
         }
       }
-  })
-}
+  })}
 
-exports.computeOdds = function(match, cb){
-  console.log("Calcul de la cote du match opposant " + match.equipes[0] + " à " + match.equipes[1])
-  
-  equipes.findByNom(match.equipes[0], function(err0, eq0){
-    equipes.findByNom(match.equipes[1], function(err1, eq1){
-            console.log(match.equipes[0], match.equipes[1], JSON.stringify([eq0, eq1]))
-            var odds1_indiv = eq0[0].cote
-            var odds2_indiv = eq1[0].cote
-            
-            var coeff = 1 / (1 / odds1_indiv + 1 / odds2_indiv);
-
-            var odds1 = 1 / (1 / odds1_indiv * coeff)
-            var odds2 = 1 / (1 / odds2_indiv * coeff)
-            
-            cb([err0, err1], [odds1, odds2])
-
-    })
-  })
-}
-
-exports.findByID = function(id, cb){
-  var params = {
-      TableName: "Match",
-      Key:{
-        'ID': id
-      }
-  };
-  console.log("Requête DynamoDB pour match " + id)
-
-  docClient.get(params, function(err, data) {
-      if (err) {
-          console.error("Impossible de lire les données du match " + id + ". Erreur JSON:", JSON.stringify(err, null, 2));
-      }
-      return cb(err, data.Item)
-  });}
+exports.findByID = findByID

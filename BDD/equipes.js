@@ -6,7 +6,7 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient()
 var joueurs = require('./joueurs.js')
 
-exports.findByNom = function(nom, cb){
+var findByNom = function(nom, cb){
   var table = "Equipe";
   var params = {
       TableName: table
@@ -22,32 +22,28 @@ exports.findByNom = function(nom, cb){
           console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
       }
 
-      return cb(err, data.Items)
-  });
-}
+      cb(err, data.Items)
+  });}
+exports.findByNom = findByNom
 
-exports.computeOdds = function(nom, cb){
-  console.log("Calcul de la cote de l'équipe " + nom)
-  var table = "Equipe";
-  var params = {
-      TableName: table,
-      FilterExpression: "nom_equipe = :nom",
-      ExpressionAttributeValues: {':nom': nom},
-  }
-  
-  docClient.scan(params, function(err, data) {
-      if (err) {
-          console.error("Échec du calcul de la cote :", JSON.stringify(err, null, 2));
-          cb(err, null)
-      } else {
-        var membres = data.Items[0].joueurs
-        joueurs.findByPseudo(membres[0], function(err1, j1){
-            joueurs.findByPseudo(membres[1], function(err2, j2){
-                joueurs.findByPseudo(membres[2], function(err3, j3){
-                    cb(err, j1[0].cote + j2[0].cote + j3[0].cote)
-                  })
-                })
-              })
-      }
-  })
-}
+exports.updateOdds = function(nom_equipe, incOdds, cb){
+    console.log("Écriture DynamoDB. Mise à jour cote équipe " + nom_equipe + " : " + incOdds)
+    var params = {
+      TableName: "Equipe",
+      Key:{
+        "annee": 2017,
+        "nom_equipe": nom_equipe
+      },
+      UpdateExpression: "set cote = cote + :inc",
+      ExpressionAttributeValues: {':inc': incOdds}
+    }
+
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.error("Mise à jour cote équipe échouée. Erreur JSON:", JSON.stringify(err, null, 2));
+            cb(err, null)
+        } else {
+            console.log("Mise à jour cote équipe " + nom_equipe + " réussie")
+            cb(null, data)
+        }
+    })}
