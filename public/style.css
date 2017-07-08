@@ -26,6 +26,10 @@
 	background-color: #4b86e5;
 }
 
+.match_apres_prochain .versus, .match_apres_prochain .equipe{
+	background-color: #c5cddb; 
+}
+
 .equipe {
 	max-width: 500px;
 	margin: auto;
@@ -65,4 +69,14 @@
 
 #score_eq1 {
 	padding-left: 1.5em;
+}
+
+#ul_prochains_matchs {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+#ul_prochains_matchs li{
+	margin-left: 0;
 }

@@ -48,14 +48,22 @@
 
 <div>
 Matchs à venir :
-    <ul>
+    <ul id="ul_prochains_matchs">
       <li ng-repeat="match in liste_matchs">
+      	<div class="match match_apres_prochain">		        
+      		<div class="equipe eq0">
 		        <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a>({{match.paris[0]}}) 
-		        	<md-button class="md-primary md-raised md-small" ng-class="{'btn-needs-update': clicked[2*$index]}" ng-click="clicked[2 * $index] = true; pari_plus_un(match, 0, 2*$index)">+1</md-button> vs. 
+		        	<md-button class="md-primary md-raised md-small" ng-class="{'btn-needs-update': clicked[2*$index]}" ng-click="clicked[2 * $index] = true; pari_plus_un(match, 0, 2*$index)">+1</md-button> 
+		    </div>
+			<div class="versus"> vs. </div>
+			<div class="equipe eq1">
 		        <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a>({{match.paris[1]}}) 
 		        	<md-button class="md-primary md-raised md-small" ng-class="{'btn-needs-update': clicked[2*$index+1]}" ng-click="clicked[2 * $index +1] = true; pari_plus_un(match, 1, 2*$index +1)">+1</md-button> 
+        	</div>
+		</div>
 		    	à {{match.horaire_prevu}}. 
 		    	Cotes : {{format_cotes_match(match)}}. 
+
       </li>
     </ul> 
     <br>
