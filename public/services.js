@@ -118,12 +118,15 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
     return deferred.promise;
 
   }}])
-.factory('equipes', function($resource, $q){
+.factory('equipes', function($resource, $q, $rootScope){
    var deja_requete = false
    var dict = undefined
    var liste = undefined
    return {
-     liste_equipes: function() {
+      sync : function(){ 
+        deja_requete = false
+        $rootScope.$broadcast('equipes:update_needed') }, // force la mise à jour la prochaine fois
+      liste_equipes: function() {
          if (deja_requete) {
            return $q.when(liste)
          } else {
@@ -138,7 +141,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
             })
          }
        },
-     findByNom: function(nom){
+      findByNom: function(nom){
        if (deja_requete){
          return $q.when(dict).then(function(d){
            return d.get(nom)
@@ -149,12 +152,15 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
          })
        }}
    }})
-.factory('joueurs', function($resource, $q){
+.factory('joueurs', function($resource, $q, $rootScope){
  var deja_requete = false
  var dict = undefined
  var liste = undefined
  return {
-   liste_joueurs: function() {
+    sync: function(){ 
+      deja_requete = false 
+      $rootScope.$broadcast('joueurs:update_needed')},
+    liste_joueurs: function() {
        if (deja_requete) {
          return $q.when(liste)
        } else {
@@ -170,7 +176,7 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
           })
        }
      },
-   findByPseudo: function(pseudo, force_reload){
+    findByPseudo: function(pseudo, force_reload){
     if (force_reload) {
       deja_requete = false
     }

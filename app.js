@@ -101,6 +101,7 @@ app.get('/api/matchs/demarrer/:id', function(req, res) {
     if (err){
       return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter."})
     } else {
+      Notifications.add('match_arrêté')
       BDD.matchs.demarrer({id: req.params.id}, (err, data) => {
         if (data){
           Notifications.add('matchs_debut')
@@ -119,6 +120,7 @@ app.get('/api/matchs/stopper/', function(req, res) {
     if (err){
       return res.status(500).json({status: "Erreur lors de la recherche du match à arrêter : " + JSON.stringify(err)})
     } else {
+      console.log("*************** Notification match arrêté ******************")
       Notifications.add('match_arrêté')
       return res.status(200).json({status: "Match arrêté avec succès." + JSON.stringify(data)})
     }
@@ -254,22 +256,27 @@ app.listen(3000, "192.168.0.16", function () {
 // NOTIFICATIONS
 setInterval(function(){
   console.log(Notifications.size + " nouvelles notifications")
-
-  if (Notifications.has('match_arrêté')){
-    Notifications.delete('match_arrêté')
-    pusher.trigger('MAJ', 'match_terminé', {})
-    console.log("Push match terminé envoyé.")
-  } else if (Notifications.has('matchs_nouveaux_paris')){
-    Notifications.delete('matchs_nouveaux_paris')
-    pusher.trigger('MAJ', 'matchs_nouveaux_paris', {})
-    console.log("Push nouveaux paris envoyé.")
-  } else if (Notifications.has('matchs_debut')){
-    Notifications.delete('matchs_debut')
-    pusher.trigger('MAJ', 'matchs_debut', {})
-    console.log("Push début match.")    
-  } else if (Notifications.has('score_mis_a_jour')){
-    Notifications.delete('score_mis_a_jour')
-    pusher.trigger('MAJ', 'score_mis_a_jour', {score_a_jour: score_match_en_cours})
-    console.log("Push score mis à jour.")    
+  if (Notifications.size > 0){
+    if (Notifications.has('match_arrêté')){
+      Notifications.delete('match_arrêté')
+      pusher.trigger('MAJ', 'match_terminé', {})
+      console.log("Push match terminé envoyé.")
+    } else if (Notifications.has('matchs_nouveaux_paris')){
+      Notifications.delete('matchs_nouveaux_paris')
+      pusher.trigger('MAJ', 'matchs_nouveaux_paris', {})
+      console.log("Push nouveaux paris envoyé.")
+    } else if (Notifications.has('matchs_debut')){
+      Notifications.delete('matchs_debut')
+      pusher.trigger('MAJ', 'matchs_debut', {})
+      console.log("Push début match.")    
+    } else if (Notifications.has('score_mis_a_jour')){
+      Notifications.delete('score_mis_a_jour')
+      pusher.trigger('MAJ', 'score_mis_a_jour', {score_a_jour: score_match_en_cours})
+      console.log("Push score mis à jour.")    
+    } else { // affiche les notifs non traitées
+      for (let value of Notifications){
+        console.log("Notif : " + value)
+      }
+    }
   }
 }, pushNotifDelay)

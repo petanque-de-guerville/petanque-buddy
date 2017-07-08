@@ -13,7 +13,7 @@ MyApp
         }
       })
     }})
-.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile, $rootScope, matchs) {
+.controller('AppCtrl', function ($scope, $mdSidenav, AuthService, $location, profile, $rootScope, matchs, equipes, joueurs) {
 
 
     // Gestion des notifications envoyées par backend
@@ -26,6 +26,8 @@ MyApp
       console.log("Reçu notif mise à jour back end : fin de match")
       matchs.sync().then(function(){
         console.log("Mise à jour profile")
+        equipes.sync()
+        joueurs.sync()
         profile.sync()
       })
     })

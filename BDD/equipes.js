@@ -25,25 +25,3 @@ var findByNom = function(nom, cb){
       cb(err, data.Items)
   });}
 exports.findByNom = findByNom
-
-exports.updateOdds = function(nom_equipe, incOdds, cb){
-    console.log("Écriture DynamoDB. Mise à jour cote équipe " + nom_equipe + " : " + incOdds)
-    var params = {
-      TableName: "Equipe",
-      Key:{
-        "annee": 2017,
-        "nom_equipe": nom_equipe
-      },
-      UpdateExpression: "set cote = cote + :inc",
-      ExpressionAttributeValues: {':inc': incOdds}
-    }
-
-    docClient.update(params, function(err, data) {
-        if (err) {
-            console.error("Mise à jour cote équipe échouée. Erreur JSON:", JSON.stringify(err, null, 2));
-            cb(err, null)
-        } else {
-            console.log("Mise à jour cote équipe " + nom_equipe + " réussie")
-            cb(null, data)
-        }
-    })}

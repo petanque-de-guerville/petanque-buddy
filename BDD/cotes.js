@@ -30,6 +30,27 @@ var updateOddsPlayer = function(pseudo, majJoueur, cb){
             cb(null, data)
         }
     })}
+var updateOddsTeam = function(nom_equipe, incOdds, cb){
+    console.log("Écriture DynamoDB. Mise à jour cote équipe " + nom_equipe + " : " + incOdds)
+    var params = {
+      TableName: "Equipe",
+      Key:{
+        "annee": 2017,
+        "nom_equipe": nom_equipe
+      },
+      UpdateExpression: "set cote = cote + :inc",
+      ExpressionAttributeValues: {':inc': incOdds}
+    }
+
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.error("Mise à jour cote équipe échouée. Erreur JSON:", JSON.stringify(err, null, 2));
+            cb(err, null)
+        } else {
+            console.log("Mise à jour cote équipe " + nom_equipe + " réussie")
+            cb(null, data)
+        }
+    })}
 var updateOddsTeamsSimultaneously = function(noms_equipes, majIncCotes, cb){
   equipes.findByNom(noms_equipes[0], function(err, equipe0){
     if(err){
@@ -44,11 +65,11 @@ var updateOddsTeamsSimultaneously = function(noms_equipes, majIncCotes, cb){
           let majJoueur0 = majIncCotes[0] / 3
           let majJoueur1 = majIncCotes[1] / 3
 
-          equipes.updateOdds(noms_equipes[0], majIncCotes[0], (err, data) => {
+          updateOddsTeam(noms_equipes[0], majIncCotes[0], (err, data) => {
             if (err){
               cb(err, null)
             } else {
-              equipes.updateOdds(noms_equipes[1], majIncCotes[1], (err, data) => {              
+              updateOddsTeam(noms_equipes[1], majIncCotes[1], (err, data) => {              
                 if (err){
                   cb(err, null)
                 } else {
@@ -81,7 +102,96 @@ var updateOddsTeamsSimultaneously = function(noms_equipes, majIncCotes, cb){
         }})
     }
   })}
+var computeOddsMatch = function(match, cb){
+  console.log("Calcul de la cote du match opposant " + match.equipes[0] + " à " + match.equipes[1])
+  
+  equipes.findByNom(match.equipes[0], function(err, eq0){
+    if (err){
+      cb(err, null)
+    } else {
+      equipes.findByNom(match.equipes[1], function(err, eq1){
+        if (err){
+          cb(err, null)
+        } else {
+          console.log(match.equipes[0], match.equipes[1], JSON.stringify([eq0, eq1]))
+          var odds1_indiv = eq0[0].cote
+          var odds2_indiv = eq1[0].cote
+          
+          var coeff = 1 / (1 / odds1_indiv + 1 / odds2_indiv);
 
+          var odds1 = 1 / (1 / odds1_indiv * coeff)
+          var odds2 = 1 / (1 / odds2_indiv * coeff)
+          
+          cb(null, [odds1, odds2])
+        }})
+    }})}
+exports.computeOddsMatch = computeOddsMatch
+var updateOddsGamesToCome = function(eq, cb){
+
+  console.log("Recherche matchs à mettre à jour...")
+  var params = {
+      TableName: "Match",
+      FilterExpression: "fini = :fini AND (equipes[0] = :eqA OR equipes[0] = :eqB OR equipes[1] = :eqA OR equipes[1] = :eqB)",
+      ExpressionAttributeValues: {':fini': 0,
+                                  ':eqA': eq[0],
+                                  ':eqB': eq[1]}
+  }
+  
+  docClient.scan(params, function(err, liste_matchs) {
+      console.log("Recherche matchs terminée.")
+      if (err) {
+          console.error("Erreur lors de la recherche des matchs à mettre à jour (cotes). Error JSON:", JSON.stringify(err, null, 2));
+          cb(err, null)
+      } else {
+        var nbMatchs = liste_matchs.Count
+        var nbMatchsTraitesOK = 0
+        var nbMatchsTraitesErr = 0
+        var postUpdate = function(status){
+          if (status === 'OK'){
+            nbMatchsTraitesOK++
+          } else {
+            nbMatchsTraitesErr++
+          }
+
+          if (nbMatchsTraitesOK + nbMatchsTraitesErr == nbMatchs){
+            if (nbMatchsTraitesErr > 0){
+              cb({'Err': nbMatchsTraitesErr}, null)
+            } else {
+              cb(null, {'OK': nbMatchsTraitesOK})
+            }
+          }}
+        console.log("Liste matchs à mettre à jour : " + JSON.stringify(liste_matchs))
+        for (let iter_match = 0; iter_match < liste_matchs.Count ; iter_match++){
+          let match = liste_matchs.Items[iter_match]
+          console.log("Mise à jour cote match : " + JSON.stringify(match))
+          computeOddsMatch(match, (err, newOdds) => {
+            if (err) {
+              console.log("Erreur lors du calcul des cotes du match : " + match.ID)
+              console.log(JSON.stringify(err))
+              postUpdate(status = 'Err')
+            } else {
+              console.log("Cotes calculées pour " + match.ID + ". Nouvelles cotes : " + newOdds)
+              var params = {
+                TableName: "Match",
+                Key:{
+                  "ID": match.ID
+                },
+                UpdateExpression: "set cotes = :cotes",
+                ExpressionAttributeValues: {':cotes': newOdds}
+              }
+
+              docClient.update(params, function(err, data) {
+                  if (err) {
+                      console.error("Mise à jour du match échouée. Erreur JSON:", JSON.stringify(err, null, 2));
+                      postUpdate(status = 'Err')
+                  } else {
+                      console.log("Mise à jour des cotes du match " + match.ID + " réussie")
+                      postUpdate(status = 'OK')
+                  }})
+            }})
+        }
+      }})
+}       
 
 exports.modification_cotes_equipes_suite_match = function(ID, cb){
   matchs.findByID(ID, function(err, match){
@@ -107,7 +217,13 @@ exports.modification_cotes_equipes_suite_match = function(ID, cb){
           cb(err, null)
         } else {
           console.log("Mise à jour cote des joueurs : " + JSON.stringify(data))
-          cb(null, data)
+          updateOddsGamesToCome(match.equipes, (err, data) => {
+            if (err){
+              cb(err, null)
+            } else {
+              cb(null, data)
+            }
+          })
         }
       })           
     } else { // match nul on ressert les probas : le moins bon devient meilleur et vice et versa
@@ -128,33 +244,18 @@ exports.modification_cotes_equipes_suite_match = function(ID, cb){
         if (err){
           cb(err, null)
         } else {
-          console.log("Mise à jour cote des joueurs : " + JSON.stringify(data))
-          cb(null, data)
+          console.log("Mise à jour cote des joueurs et des équipes : " + JSON.stringify(data))
+          updateOddsGamesToCome(match.equipes, (err, data) => {
+            if (err){
+              cb(err, null)
+            } else {
+              cb(null, data)
+            }
+          })
         }
       })              
     }
-  }})
-}
-
-
-exports.computeOddsMatch = function(match, cb){
-  console.log("Calcul de la cote du match opposant " + match.equipes[0] + " à " + match.equipes[1])
-  
-  equipes.findByNom(match.equipes[0], function(err0, eq0){
-    equipes.findByNom(match.equipes[1], function(err1, eq1){
-            console.log(match.equipes[0], match.equipes[1], JSON.stringify([eq0, eq1]))
-            var odds1_indiv = eq0[0].cote
-            var odds2_indiv = eq1[0].cote
-            
-            var coeff = 1 / (1 / odds1_indiv + 1 / odds2_indiv);
-
-            var odds1 = 1 / (1 / odds1_indiv * coeff)
-            var odds2 = 1 / (1 / odds2_indiv * coeff)
-            
-            cb([err0, err1], [odds1, odds2])
-
-    })
-  })}
+  }})}
 exports.computeOddsTeam = function(nom, cb){
   console.log("Calcul de la cote de l'équipe " + nom)
   equipes.findByNom(nom, function(err, equipes) {

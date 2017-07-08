@@ -87,7 +87,7 @@ exports.modifieScores = function(obj, cb){
             var params = {
               TableName: "Match",
               Key:{
-                /* S'il y a plusieurs matchs en cours, on arrête le premier. Devrait pas il y en avoir plusieurs ! */
+                /* S'il y a plusieurs matchs en cours, on arrête le premier. Devrait pas y en avoir plusieurs ! */
                 "ID": data.Items[0].ID 
               },
             UpdateExpression: updateExp,

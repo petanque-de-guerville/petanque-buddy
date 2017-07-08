@@ -8,10 +8,11 @@ Menu
 Paris
 ----
 * afficher les gains potentiels (avec les paris en cours)
+* enregistrer la cote du match lors du pari (car cotes évoluent)
 
 Cotes
 -----
-* modifier les cotes des joueurs au fur et à mesure de l'avancement des matchs
+
 
 Divers
 -----
@@ -23,11 +24,14 @@ Page d'accueil
 
 Page Fiche Joueur
 --------
-
+* Faire réagir au message 'joueurs:update_needed'
 
 Page Ma fiche
 ---------
 
+Page Fiche équipe
+----------
+* Faire réagir au message 'equipes:update_needed'
 
 Admin
 -----
