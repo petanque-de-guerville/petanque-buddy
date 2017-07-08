@@ -8,5 +8,6 @@ Le joueur '{{pseudo}}' fait partie de l'équipe </br>
     {{joueur.equipe}}
   </a> et possède {{joueur.fortune}} boyards. </br>
   Sa cote est de : {{joueur.cote}} </br>
-  Son prochain match est dans ~{{duree_avant_match}} min.
+  <span ng-if="duree_avant_match != null">Son prochain match est dans ~{{duree_avant_match}} min. </span>
+  <span ng-if="duree_avant_match == null">{{pseudo}} n'a plus de match à jouer.</span>  
 </span>

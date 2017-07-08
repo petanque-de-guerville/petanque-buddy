@@ -23,14 +23,14 @@ Page d'accueil
 
 Page Fiche Joueur
 --------
-* Faire réagir au message 'joueurs:update_needed'
+
 
 Page Ma fiche
 ---------
 
 Page Fiche équipe
 ----------
-* Faire réagir au message 'equipes:update_needed'
+
 
 Admin
 -----

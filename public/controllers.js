@@ -165,36 +165,61 @@ MyApp
       })})
 .controller('FicheEquipeCtrl', function($scope, $routeParams, equipes, matchs){
     $scope.nom_equipe = $routeParams.nom;
-    $scope.done = false;
-    $scope.erreur = false;
-
-    equipes.findByNom($routeParams.nom).then(function(e){
-      $scope.equipe = e;
-      $scope.done = true;
-      return e
+    $scope.$on('equipes:update_needed', function(event,data) {
+      affichage_page()
     })
 
-    matchs.prochain_match_de($scope.nom_equipe).then(function(match){
-      $scope.prochain_match = { "adversaire": (match.equipes[0] == $scope.nom_equipe) ? match.equipes[1] : match.equipes[0],
-                                "horaire": match.horaire_prevu}
-    })
 
-    matchs.matchs_de($scope.nom_equipe).then(function(matchs_de){
-      $scope.liste_matchs = matchs_de
-    })})
+    var affichage_page = function(){
+      $scope.done = false;
+      $scope.erreur = false;
+      $scope.prochain_match = undefined
+      $scope.liste_matchs = undefined
+      
+      equipes.findByNom($routeParams.nom).then(function(e){
+        $scope.equipe = e;
+        $scope.done = true;
+        $scope.cote = e.cote
+      })
+
+      matchs.prochain_match_de($scope.nom_equipe).then(function(match){
+        $scope.prochain_match = { "adversaire": (match.equipes[0] == $scope.nom_equipe) ? match.equipes[1] : match.equipes[0],
+                                  "horaire": match.horaire_prevu}
+      })
+
+      matchs.matchs_de($scope.nom_equipe).then(function(matchs_de){
+        $scope.liste_matchs = matchs_de
+      })      }
+    
+    affichage_page()
+})
 .controller('FicheJoueurCtrl', function($scope, $routeParams, joueurs, matchs){
     $scope.pseudo = $routeParams.pseudo;
-    $scope.done = false;
-    $scope.erreur = false;
 
-    joueurs.findByPseudo($routeParams.pseudo).then(function(j){
-      $scope.joueur = j
-      matchs.prochain_match_de(j.equipe).then(match => {
-        $scope.duree_avant_match = matchs.temps_jusqu_a_match(match)
-        $scope.done = true;
-      })
+    $scope.$on('joueurs:update_needed', (event, data) => {
+      affichage_page()
     })
 
+    var affichage_page = function(){
+      $scope.done = false;
+      $scope.erreur = false;
+      $scope.duree_avant_match = undefined
+      $scope.joueur = undefined
+
+      joueurs.findByPseudo($routeParams.pseudo).then(function(j){
+        $scope.joueur = j
+        matchs.prochain_match_de(j.equipe).then(match => {
+          if (match){
+            $scope.duree_avant_match = matchs.temps_jusqu_a_match(match)
+          } else {
+            $scope.duree_avant_match = null
+          }
+          $scope.done = true})
+      })
+
+    }
+
+    affichage_page()
   })
 .controller('MaFicheCtrl', function($scope, profile, matchs){
     $scope.profile = profile
