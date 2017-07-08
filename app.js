@@ -256,7 +256,7 @@ app.listen(3000, "192.168.0.16", function () {
 // NOTIFICATIONS
 setInterval(function(){
   console.log(Notifications.size + " nouvelles notifications")
-  if (Notifications.size > 0){
+  while (Notifications.size > 0){
     if (Notifications.has('match_arrêté')){
       Notifications.delete('match_arrêté')
       pusher.trigger('MAJ', 'match_terminé', {})

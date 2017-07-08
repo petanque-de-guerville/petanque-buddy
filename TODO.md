@@ -8,7 +8,6 @@ Menu
 Paris
 ----
 * afficher les gains potentiels (avec les paris en cours)
-* enregistrer la cote du match lors du pari (car cotes évoluent)
 
 Cotes
 -----

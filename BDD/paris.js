@@ -19,7 +19,8 @@ exports.inserePari = function(obj, cb){
             "mise": obj.mise,
             "objet_pari": "victoire",
             "cible_pari": obj.num_equipe,
-            "parieur": obj.pseudo
+            "parieur": obj.pseudo,
+            "cote": obj.match.cotes[obj.num_equipe]
         }
     };
 
@@ -54,9 +55,9 @@ exports.paiement_joueurs = function(ID, cb){
         Paris.Items.forEach(function(pari){
           console.log("Paiement du pari", pari.ID)
           if (pari.cible_pari == equipe_victoire){
-            console.log(pari.parieur, "gagne", match.cotes[equipe_victoire] * pari.mise, "boyards.")
+            console.log(pari.parieur, "gagne", pari.cote * pari.mise, "boyards.")
             joueurs.addFortune({pseudo: pari.parieur,
-                                nb_boyards: match.cotes[equipe_victoire] * pari.mise},
+                                nb_boyards: pari.cote * pari.mise},
                                 function(err, data){
                                   if (err){
                                     console.log("Paiement de", pari.parieur, "échoué")

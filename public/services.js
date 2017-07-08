@@ -354,9 +354,13 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
             })}
   var sync = function(data){
     if (data && data.score_a_jour){
-      console.log("Mise à jour score match en cours")
       en_cours().then(function(match_en_cours){
-        match_en_cours.score = data.score_a_jour
+        if (match_en_cours){ // Peut-être que le match est terminé depuis qu'on a demandé la MAJ du score
+          console.log("Mise à jour score : effectuée !")
+          match_en_cours.score = data.score_a_jour
+        } else {
+          console.log("Mise à jour score : pas de match en cours !")
+        }
       })
     } else {
       update_needed = true
