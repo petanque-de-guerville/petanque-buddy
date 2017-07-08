@@ -248,20 +248,13 @@ MyApp
     })
 
     $scope.$on('user:updated', function(event,data) {
-      $scope.fortune = profile.getFortune();
+      $scope.fortune = profile.getFortune().toFixed(2);
       console.log("Fortune : " + $scope.fortune)  
     })
 
     // $scope.$on('matchs:score_a_jour', function(event, data){
     //   $scope.match_en_cours = matchs.en_cours()
     // })
-
-
-    $scope.done = false;
-    $scope.erreur = false;
-    $scope.pas_de_match_en_cours = true
-    $scope.fortune = profile.getFortune();
-    $scope.clicked = []
 
     $scope.pari_plus_un = function(match, num_equipe, index){
       if (profile.getFortune() > 0){
@@ -291,6 +284,12 @@ MyApp
       
 
     var affichage_matchs = function(){
+      $scope.done = false;
+      $scope.erreur = false;
+      $scope.pas_de_match_en_cours = true
+      $scope.fortune = (profile.getFortune() != undefined) ? profile.getFortune().toFixed(2) : "Pas connecté" ;
+      $scope.clicked = []
+
       $q.all([matchs.liste_matchs(),
               matchs.en_cours(),
               matchs.prochain()]).then(function(array){

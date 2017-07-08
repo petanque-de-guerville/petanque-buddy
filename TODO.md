@@ -16,6 +16,7 @@ Cotes
 Divers
 -----
 * Ajouter une favicon.ico
+* Revenir à la page de connexion sur "Réactualiser" la page
 
 Page d'accueil
 -------

@@ -1,2 +1,68 @@
 .toolbardemoBasicUsage md-toolbar md-icon.md-default-theme {
   color: white; }
+
+.md-button.md-small { /*Rend petits les boutons pour les paris*/
+	min-width: 1%;
+}
+
+.suit_scroll {
+	position:fixed; 
+	top:2%; 
+	right:2%; 
+	background-color: #e5b63d;
+	padding: 7px 3px 7px 3px;
+	z-index:10;
+}
+
+.btn-needs-update {
+	background-color: rgba(255, 121, 121, 0.96) !important;
+}
+
+.match_en_cours .versus, .match_en_cours .equipe{
+	background-color: #18ba5b;
+}
+
+.prochain_match .versus, .prochain_match .equipe{
+	background-color: #4b86e5;
+}
+
+.equipe {
+	max-width: 500px;
+	margin: auto;
+}
+
+.equipe.eq0	{
+	text-align: left;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	padding: 1em 3em 0.5em 1em;
+}
+
+.equipe.eq1	{
+	text-align: right;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	padding: 0.5em 1em 1em 3em;
+}
+
+.versus {
+	max-width: 500px;
+	margin: auto;
+	padding: 1em 1em;
+	text-align: center;
+	background: url('img/explosion_versus.svg') no-repeat center;
+  	background-size: contain;
+}
+
+#score_eq0, #score_eq1 {
+	font-size: 2em;
+}
+
+#score_eq0 {
+	padding-right: 1.5em;
+
+}
+
+#score_eq1 {
+	padding-left: 1.5em;
+}
