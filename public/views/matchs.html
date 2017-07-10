@@ -12,7 +12,7 @@
 			<div class="match match_en_cours">
 				<div class="horaire"> <span class="ecrit_verticalement"> <em> En cours... </em> </span></div>	      
 				<div class="equipe eq0"> 
-					<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> ({{format_cotes_match(match_en_cours)[0]}})
+					<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> ({{match_en_cours.paris[0]}})
 				</div>
 				<div class="versus"> 
 						<div id="score_eq0">
@@ -27,7 +27,7 @@
 				</div>
 
 				<div class="equipe eq1"> 
-					<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> ({{format_cotes_match(match_en_cours)[1]}})
+					<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> ({{match_en_cours.paris[1]}})
 				</div>
 			</div>
 		</span>
@@ -53,13 +53,12 @@
  --></div>
 
 <div>
-<span ng-click="aff = !aff" ng-init="aff =true">Matchs à venir :</span>
-    <ul id="ul_prochains_matchs" ng-show="aff">
+    <ul id="ul_prochains_matchs">
       <li ng-repeat="match in liste_matchs">
       	<div class="match match_apres_prochain">	
       		<div class="horaire"> <span class="ecrit_verticalement">Prévu à {{match.horaire_prevu}} </span></div>	        
       		<div class="equipe eq0">
-		        <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a>({{match.paris[0]}}) 
+		        <a ng-href="#/equipes/{{match.equipes[0]}}">{{match.equipes[0]}}</a> ({{match.paris[0]}}) 
 		        	<md-button class="md-primary md-raised md-small" ng-class="{'btn-needs-update': clicked[2*$index]}" ng-click="clicked[2 * $index] = true; pari_plus_un(match, 0, 2*$index)">+1</md-button> 
 		    </div>
 			<div class="versus"> 
@@ -74,11 +73,11 @@
 					</div>
 			</div>
 			<div class="equipe eq1">
-		        <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a>({{match.paris[1]}}) 
+		        <a ng-href="#/equipes/{{match.equipes[1]}}">{{match.equipes[1]}}</a> ({{match.paris[1]}}) 
 		        	<md-button class="md-primary md-raised md-small" ng-class="{'btn-needs-update': clicked[2*$index+1]}" ng-click="clicked[2 * $index +1] = true; pari_plus_un(match, 1, 2*$index +1)">+1</md-button> 
         	</div>
 		</div>
       </li>
     </ul> 
-    <br>
+
 </div>

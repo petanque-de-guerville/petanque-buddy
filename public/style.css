@@ -69,6 +69,7 @@
 	text-align: right;
 	border-bottom-right-radius: 10px;
 	padding: 0.5em 1em 1em 3em;
+	margin-bottom: .5em;
 }
 
 .versus {
@@ -89,13 +90,13 @@
 #score_eq0 {
 	position: absolute;
 	top: 0%;
-	left: 20%;
+	left: 10%;
 }
 
 #score_eq1 {
 	position: absolute;
 	top: 0%;
-	right: 20%;
+	right: 10%;
 }
 
 .score_label {
@@ -119,13 +120,13 @@
 .cote_eq0 {
 	position: absolute;
 	top: 0%;
-	left: 20%;
+	left: 10%;
 }
 
 .cote_eq1 {
 	position: absolute;
 	top: 0%;
-	right: 20%;
+	right: 10%;
 }
 
 .cote_label {
