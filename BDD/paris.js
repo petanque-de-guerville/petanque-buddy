@@ -73,5 +73,23 @@ exports.paiement_joueurs = function(ID, cb){
     })
 
   })
+}
 
+exports.parieurs_tel_match = function(obj, callback){
+    var params = {
+      TableName: "Pari",
+      FilterExpression: "ID_match = :ID AND objet_pari = :obj AND cible_pari=:eq",
+      ExpressionAttributeValues: {
+        ':ID': obj.match.ID,
+        ':obj': "victoire",
+        ':eq': obj.num_equipe}
+    }
+
+    docClient.scan(params, function(err, Paris) {
+      if (err){
+        callback(err, null)
+      } else {
+        callback(null, Paris)
+      }
+    })
 }

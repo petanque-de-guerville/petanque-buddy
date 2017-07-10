@@ -282,6 +282,34 @@ MyApp
       return cotes.formatOddsForGame(match, 2)
     }
       
+    $scope.affiche_parieurs = function(match, num_equipe){
+        paris.parieurs_tel_match(match, num_equipe).then(Paris => {
+          var texte = "";
+          if (Paris.Count == 0){
+            texte = "Aucun pari enregistré."
+          } else {
+            var result = new Map(); 
+            Paris.Items.forEach(pari => { 
+              if (result.get(pari.parieur)) {
+                result.set(pari.parieur, result.get(pari.parieur) + pari.mise) 
+              } else {
+                result.set(pari.parieur, pari.mise) 
+              }})
+            for (let key of result.keys()){
+              texte += key + " a misé " + result.get(key) + " boyards. </br>"
+            }
+          }
+
+          $mdDialog.show(
+           $mdDialog.alert()
+                    .parent(angular.element(document.querySelector('#popupContainer')))
+                    .clickOutsideToClose(true)
+                    .title('Liste des parieurs')
+                    .htmlContent(texte)
+                    .ariaLabel('Liste des parieurs')
+                    .ok('OK'))      
+        })
+    }
 
     var affichage_matchs = function(){
       $scope.done = false;

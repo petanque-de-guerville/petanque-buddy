@@ -171,9 +171,18 @@ app.post('/api/paris/issue_match', function(req, res, next) {
     })
   } else {
     return res.status(500).json({status: "Erreur. Mises sur le match non mises à jour."})
-  }
-})
-})
+  }})})
+
+app.post('/api/paris/parieurs_tel_match', function(req, res, next) {
+  BDD.paris.parieurs_tel_match({match: req.body.match,
+                                num_equipe: req.body.num_equipe}, (err, Paris) => {
+    if (err){
+      return res.status(500).json({status: "Erreur lors de l'insertion du pari."})
+    } else {
+      return res.status(200).json({status: "Interrogation réussie.",
+                                   parieurs: Paris})
+    }
+  })})
 
 
 app.post('/login', function(req, res, next) {

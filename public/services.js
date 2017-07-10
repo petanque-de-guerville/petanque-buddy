@@ -432,5 +432,26 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
                         deferred.reject();
                       })
                 return deferred.promise
-              }
+              },
+          parieurs_tel_match: function(match, num_equipe){
+                var deferred = $q.defer();
+                $http.post('/api/paris/parieurs_tel_match', {match: match,
+                                                             num_equipe: num_equipe})
+                      // handle success
+                      .success(function (data, status) {
+                        if(status === 200){
+                          console.log("Interrogation BDD réussie.")
+                          console.log(data.parieurs.Count + " paris sur la victoire de cette équipe.")
+                          deferred.resolve(data.parieurs);
+                        } else {
+                          console.log("Interrogation BDD échouée.")
+                          deferred.reject();
+                        }})
+                      // handle error
+                      .error(function (data) {
+                        console.log("Interrogation échouée.")
+                        deferred.reject();
+                      })
+                return deferred.promise            
+          }
         }})

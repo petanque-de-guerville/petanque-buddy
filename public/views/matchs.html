@@ -12,7 +12,7 @@
 			<div class="match match_en_cours">
 				<div class="horaire"> <span class="ecrit_verticalement"> <em> En cours... </em> </span></div>	      
 				<div class="equipe eq0"> 
-					<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> ({{match_en_cours.paris[0]}})
+					<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> (<span ng-click="affiche_parieurs(match_en_cours, 0)">{{match_en_cours.paris[0]}}</span>)
 				</div>
 				<div class="versus"> 
 						<div id="score_eq0">
@@ -27,7 +27,7 @@
 				</div>
 
 				<div class="equipe eq1"> 
-					<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> ({{match_en_cours.paris[1]}})
+					<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> (<span ng-click="affiche_parieurs(match_en_cours, 1)">{{match_en_cours.paris[1]}}</span>)
 				</div>
 			</div>
 		</span>

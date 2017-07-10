@@ -1,5 +1,5 @@
 var MyApp = angular.module('MyApp',
-                          ['ngMaterial', 'ngMessages', 'ngRoute', 'ngResource']); //'material.svgAssetsCache'
+                          ['ngMaterial', 'ngMessages', 'ngRoute', 'ngResource', 'ngSanitize']); //'material.svgAssetsCache'
 MyApp.config(['$routeProvider', '$locationProvider',
   function($routeProvider) {
     $routeProvider
