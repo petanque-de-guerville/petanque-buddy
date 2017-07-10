@@ -7,8 +7,7 @@
 
 .suit_scroll {
 	position:fixed; 
-	top:2%; 
-	right:2%; 
+	bottom:0%; 
 	background-color: #e5b63d;
 	padding: 7px 3px 7px 3px;
 	z-index:10;
@@ -26,37 +25,59 @@
 	background-color: #4b86e5;
 }
 
-.match_apres_prochain .versus, .match_apres_prochain .equipe{
+.match_apres_prochain .versus, .match_apres_prochain .equipe, .match_apres_prochain .horaire{
 	background-color: #c5cddb; 
+}
+
+.match {
+	position: relative;
+}
+
+.match_apres_prochain .horaire {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 2em;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+
+.ecrit_verticalement {
+	position: absolute;
+	height: 1em;
+	width: 10em;
+	-moz-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+	-webkit-transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+	transform: translateX(-40%) translateY(150%) rotate(-90deg);
 }
 
 .equipe {
 	max-width: 500px;
-	margin: auto;
+	margin-left: 2em;
 }
 
 .equipe.eq0	{
 	text-align: left;
-	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	padding: 1em 3em 0.5em 1em;
 }
 
 .equipe.eq1	{
 	text-align: right;
-	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
 	padding: 0.5em 1em 1em 3em;
 }
 
 .versus {
-	max-width: 500px;
-	margin: auto;
+	position: relative;
+	max-width: 700px;
+	margin-left: 2em;
 	padding: 1em 1em;
-	text-align: center;
+	text-align:center;
 	background: url('img/explosion_versus.svg') no-repeat center;
   	background-size: contain;
 }
+
 
 #score_eq0, #score_eq1 {
 	font-size: 2em;
@@ -79,4 +100,24 @@
 
 #ul_prochains_matchs li{
 	margin-left: 0;
+}
+
+.versus>.cote_eq0, .versus>.cote_eq1 {
+	font-size: 2em;
+}
+
+.cote_eq0 {
+	position: absolute;
+	top: 0%;
+	left: 5%;
+}
+
+.cote_eq1 {
+	position: absolute;
+	top: 0%;
+	right: 5%;
+}
+
+.cote_label {
+	font-size: 33%;
 }

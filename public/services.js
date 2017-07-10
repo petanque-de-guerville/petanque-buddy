@@ -285,19 +285,15 @@ angular.module("MyApp").factory('AuthService', ['$q', '$timeout', '$http', funct
   //       })
   //     }}
 
-  var formatOddsForGame = function(match, sep, nb_dec){
-    if (typeof(sep)==='undefined') sep = ",";
-    if (typeof(nb_dec)==='undefined') nb_dec = 2;
-
-    return ' ' + Math.round(match.cotes[0] * 10**nb_dec)/10**nb_dec + 
-              sep + ' ' + Math.round(match.cotes[1] * 10**nb_dec)/10**nb_dec
+  var formatOddsForGame = function(match, nb_dec = 2){
+    return [Math.round(match.cotes[0] * 10**nb_dec)/10**nb_dec, Math.round(match.cotes[1] * 10**nb_dec)/10**nb_dec]
   }
 
   return {
     // getOddsForPlayer: getOddsForPlayer,
     // getOddsForGame: getOddsForGame,
     // getOddsForPlayer: getOddsForPlayer,
-    formatOddsForGame: formatOddsForGame
+    formatOddsForGame
   }})
 .factory('matchs', function($q, $resource, cotes, $rootScope){
   var liste = undefined
