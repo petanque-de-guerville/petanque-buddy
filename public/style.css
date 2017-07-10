@@ -17,14 +17,14 @@
 	background-color: rgba(255, 121, 121, 0.96) !important;
 }
 
-.match_en_cours .versus, .match_en_cours .equipe{
+.match_en_cours .versus, .match_en_cours .equipe, .match_en_cours .horaire{
 	background-color: #18ba5b;
 }
 
-.prochain_match .versus, .prochain_match .equipe{
+/*.prochain_match .versus, .prochain_match .equipe{
 	background-color: #4b86e5;
 }
-
+*/
 .match_apres_prochain .versus, .match_apres_prochain .equipe, .match_apres_prochain .horaire{
 	background-color: #c5cddb; 
 }
@@ -33,7 +33,10 @@
 	position: relative;
 }
 
-.match_apres_prochain .horaire {
+
+
+
+.horaire {
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
@@ -84,12 +87,19 @@
 }
 
 #score_eq0 {
-	padding-right: 1.5em;
-
+	position: absolute;
+	top: 0%;
+	left: 20%;
 }
 
 #score_eq1 {
-	padding-left: 1.5em;
+	position: absolute;
+	top: 0%;
+	right: 20%;
+}
+
+.score_label {
+	font-size: 33%;
 }
 
 #ul_prochains_matchs {
@@ -109,13 +119,13 @@
 .cote_eq0 {
 	position: absolute;
 	top: 0%;
-	left: 5%;
+	left: 20%;
 }
 
 .cote_eq1 {
 	position: absolute;
 	top: 0%;
-	right: 5%;
+	right: 20%;
 }
 
 .cote_label {

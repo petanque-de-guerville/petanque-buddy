@@ -9,46 +9,52 @@
 	<div>
 		<span ng-if="pas_de_match_en_cours">Il n'y a pas de match en cours.</span>
 		<span ng-if="!pas_de_match_en_cours">
-			Le match en cours oppose 
 			<div class="match match_en_cours">
+				<div class="horaire"> <span class="ecrit_verticalement"> <em> En cours... </em> </span></div>	      
 				<div class="equipe eq0"> 
-					<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> 
+					<a ng-href="#/equipes/{{match_en_cours.equipes[0]}}">{{match_en_cours.equipes[0]}}</a> ({{format_cotes_match(match_en_cours)[0]}})
 				</div>
 				<div class="versus"> 
-					<span id="score_eq0">{{match_en_cours.score[0]}}</span> 
-					vs. 
-					<span id="score_eq1">{{match_en_cours.score[1]}}</span>
-				</div>  
+						<div id="score_eq0">
+							<div class="score_label"> score </div>
+							<span class="score_chiffre">{{match_en_cours.score[0]}}</span> 
+						</div>
+						vs.
+						<div id="score_eq1">
+							<div class="score_label"> score</div>
+							<span class="score_chiffre">{{match_en_cours.score[1]}}</span> 
+						</div>
+				</div>
+
 				<div class="equipe eq1"> 
-					<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> 
+					<a ng-href="#/equipes/{{match_en_cours.equipes[1]}}">{{match_en_cours.equipes[1]}}</a> ({{format_cotes_match(match_en_cours)[1]}})
 				</div>
-				(cotes : {{cotes_en_cours_formatees}}).
 			</div>
 		</span>
-	<div>
-		<span ng-if="prochain_match != null"> 
-			Le prochain match opposera
-			<div class="match prochain_match">
-				<div class="equipe eq0">
-					<a ng-href="#/equipes/{{prochain_match.equipes[0]}}">{{prochain_match.equipes[0]}}</a>
+<!-- 		<div>
+			<span ng-if="prochain_match != null"> 
+				Le prochain match opposera
+				<div class="match prochain_match">
+					<div class="equipe eq0">
+						<a ng-href="#/equipes/{{prochain_match.equipes[0]}}">{{prochain_match.equipes[0]}}</a>
+					</div>
+					<div class="versus"> 
+						<span id="score_eq0">--</span> 
+						vs. 
+						<span id="score_eq1">--</span> 
+					</div>
+					<div class="equipe eq1">
+						<a ng-href="#/equipes/{{prochain_match.equipes[1]}}">{{prochain_match.equipes[1]}}</a> 
+					</div>	
+					(cotes : {{cotes_prochain_formatees}}). L'horaire prévu est {{prochain_match.horaire_prevu}}.
 				</div>
-				<div class="versus"> 
-					<span id="score_eq0">--</span> 
-					vs. 
-					<span id="score_eq1">--</span> 
-				</div>
-				<div class="equipe eq1">
-					<a ng-href="#/equipes/{{prochain_match.equipes[1]}}">{{prochain_match.equipes[1]}}</a> 
-				</div>	
-				(cotes : {{cotes_prochain_formatees}}). L'horaire prévu est {{prochain_match.horaire_prevu}}.
-			</div>
-		</span>
-	</div>
-</div>
+			</span>
+		</div>
+ --></div>
 
 <div>
-Matchs à venir :
-    <ul id="ul_prochains_matchs">
+<span ng-click="aff = !aff" ng-init="aff =true">Matchs à venir :</span>
+    <ul id="ul_prochains_matchs" ng-show="aff">
       <li ng-repeat="match in liste_matchs">
       	<div class="match match_apres_prochain">	
       		<div class="horaire"> <span class="ecrit_verticalement">Prévu à {{match.horaire_prevu}} </span></div>	        
